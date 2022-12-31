@@ -13,7 +13,7 @@
 	<artifactId>convocatoria-backend</artifactId>
 	<version>1.0.0</version>
 	<name>API Rest de Convocatoria</name>
-	<description>API Restful para una aplicación de eventos cofrades utilizando Spring Boot, Spring Data JPA y MySQL. Securizada con autenticación JWT basada en roles usando Spring Security. Documentada con Swagger, bajo la especificación OpenAPI (OAS3)</description>
+	<description>API Restful para una aplicación de eventos cofrades utilizando Spring Boot, Spring Data JPA y MySQL. Securizada con autenticación JWT basada en roles usando Spring Security.</description>
 
 	<properties>
 		<java.version>11</java.version>
