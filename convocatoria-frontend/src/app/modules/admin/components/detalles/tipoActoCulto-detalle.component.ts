@@ -47,7 +47,7 @@ export class TipoActoCultoDetalleComponent implements OnInit {
     this.tipoActoCulto = data.objeto;
 
     // Inicializamos los atributos del título
-    this.tituloPagina = this.modo + ' ' + AC.TIPO_BANDA.toLowerCase();
+    this.tituloPagina = this.modo + ' ' + AC.TIPO_ACTO_CULTO.toLowerCase();
 
     // Inicializamos los atributos del modo
     if (this.modo == ModoEnum.VER) {
