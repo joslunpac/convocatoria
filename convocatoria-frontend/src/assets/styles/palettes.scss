@@ -1,0 +1,49 @@
+@use "@angular/material" as mat;
+
+// Paletas de color para el tema
+$palette-primary: mat.define-palette(mat.$grey-palette);
+$palette-accent: mat.define-palette(mat.$amber-palette);
+
+// Paletas de color para los roles
+$palette-administrador: mat.define-palette(mat.$red-palette);
+$palette-moderador: mat.define-palette(mat.$orange-palette);
+$palette-usuario: mat.define-palette(mat.$blue-palette);
+
+// Paletas de color para los carácteres
+$palette-sac: mat.define-palette(mat.$red-palette);
+$palette-glo: mat.define-palette(mat.$cyan-palette);
+$palette-pen: mat.define-palette(mat.$purple-palette);
+
+// Paletas de color para los criterios
+$palette-visible: mat.define-palette(mat.$green-palette);
+$palette-no-visible: mat.define-palette(mat.$red-palette);
+$palette-extraordinario: mat.define-palette(mat.$blue-palette);
+$palette-revisar: mat.define-palette(mat.$yellow-palette);
+$palette-masculino: mat.define-palette(mat.$light-blue-palette);
+$palette-femenino: mat.define-palette(mat.$pink-palette);
+$palette-sin-genero: mat.define-palette(mat.$amber-palette);
+
+// Paletas de color para las acciones
+$palette-buscar: mat.define-palette(mat.$blue-palette);
+$palette-crear: mat.define-palette(mat.$green-palette);
+$palette-ver: mat.define-palette(mat.$grey-palette);
+$palette-editar: mat.define-palette(mat.$orange-palette);
+$palette-duplicar: mat.define-palette(mat.$teal-palette);
+$palette-eliminar: mat.define-palette(mat.$red-palette);
+
+// Paletas de color para los estados de los eventos
+$palette-aplazado: mat.define-palette(mat.$yellow-palette);
+$palette-suspendido: mat.define-palette(mat.$orange-palette);
+$palette-finalizado: mat.define-palette(mat.$red-palette);
+$palette-directo: mat.define-palette(mat.$green-palette);
+$palette-planificado: mat.define-palette(mat.$grey-palette);
+
+// Paletas de color para el tiempo
+$palette-hoy: mat.define-palette(mat.$green-palette);
+$palette-manana: mat.define-palette(mat.$blue-palette);
+
+// Paletas de color para la severidad
+$palette-critico: mat.define-palette(mat.$purple-palette);
+$palette-grave: mat.define-palette(mat.$red-palette);
+$palette-moderado: mat.define-palette(mat.$orange-palette);
+$palette-leve: mat.define-palette(mat.$yellow-palette);

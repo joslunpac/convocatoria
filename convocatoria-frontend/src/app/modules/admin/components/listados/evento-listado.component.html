@@ -1,0 +1,347 @@
+<div id="contenedor">
+  <div id="cabecera">
+    <div class="titulo">
+      <mat-label>{{titulo}}</mat-label>
+      <mat-label class="hide-lt-sm">{{descripcion}}</mat-label>
+    </div>
+    <div class="acciones">
+      <button mat-icon-button matTooltip="{{ac.L_LIMPIAR_TODO}}" (click)="limpiarTodo()" *ngIf="mostrarLimpiarTodo()">
+        <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+      </button>
+      <button mat-mini-fab class="mat-elevation-z2" color="back-buscar" matTooltip="{{ac.L_BUSCAR}}" (click)="obtenerListadoCompleto()">
+        <mat-icon>{{ac.I_BUSCAR}}</mat-icon>
+      </button>
+      <button mat-mini-fab class="mat-elevation-z2" color="back-crear" matTooltip="{{ac.L_CREAR}}" (click)="irADetalle()" *ngIf="esAdministrador">
+        <mat-icon>{{ac.I_CREAR}}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="column">
+    <div id="listado-filtros" class="row column-lt-lg">
+      <div class="column">
+        <div class="row column-lt-md flex-auto-childs">
+          <div class="column">
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo de búsqueda</mat-label>
+              <mat-select [(ngModel)]="tipoBusqueda" (selectionChange)="cambiarTipoBusqueda()">
+                <mat-option [value]="tipoBusqueda.valor" *ngFor="let tipoBusqueda of tiposBusqueda">
+                  {{tipoBusqueda.valor | titlecase}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Orden</mat-label>
+              <mat-select [(ngModel)]="ordenacionAscendente">
+                <mat-option [value]="true">{{ac.L_ASCENDENTE}}</mat-option>
+                <mat-option [value]="false">{{ac.L_DESCENDENTE}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="column">
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha inicial</mat-label>
+              <input matInput [matDatepicker]="pickerInicial" [(ngModel)]="fechaInicial"
+                [disabled]="tipoBusqueda == null || tipoBusqueda == ac.L_TIPO_BUSQUEDA_TODOS || tipoBusqueda == ac.L_TIPO_BUSQUEDA_DIRECTO">
+              <mat-datepicker-toggle matSuffix [for]="pickerInicial"></mat-datepicker-toggle>
+              <mat-datepicker #pickerInicial></mat-datepicker>
+              <button matSuffix mat-icon-button matTooltip="{{ac.L_LIMPIAR}}" (click)="fechaInicial = null" *ngIf="fechaInicial != null">
+                <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+              </button>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha final</mat-label>
+              <input matInput [matDatepicker]="pickerFinal" [(ngModel)]="fechaFinal"
+                [disabled]="tipoBusqueda != ac.L_TIPO_BUSQUEDA_ENTRE">
+              <mat-datepicker-toggle matSuffix [for]="pickerFinal"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFinal></mat-datepicker>
+              <button matSuffix mat-icon-button matTooltip="{{ac.L_LIMPIAR}}" (click)="fechaFinal = null" *ngIf="fechaFinal != null">
+                <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="column flex-1">
+        <div class="row column-lt-md flex-auto-childs">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ac.TIPO_ACTO_CULTO}}</mat-label>
+            <mat-select #tipoActoCultoForm [(ngModel)]="idTipoActoCulto">
+              <mat-option>...</mat-option>
+              <mat-option [value]="tipoActoCulto.id" *ngFor="let tipoActoCulto of tiposActoCultoFiltro">
+                {{tipoActoCulto.nombrePlural}}
+              </mat-option>
+            </mat-select>
+            <button matSuffix mat-icon-button matTooltip="{{ac.L_LIMPIAR}}" (click)="idTipoActoCulto = undefined" *ngIf="idTipoActoCulto != undefined">
+              <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ac.ENTIDAD}} organizadora</mat-label>
+            <mat-select #entidadOrganizadoraForm [(ngModel)]="idEntidadOrganizadora">
+              <mat-option>...</mat-option>
+              <mat-option [value]="entidad.id" *ngFor="let entidad of entidadesFiltro">
+                {{entidad | nombreEntidadCompleto}}
+              </mat-option>
+            </mat-select>
+            <button matSuffix mat-icon-button matTooltip="{{ac.L_LIMPIAR}}" (click)="idEntidadOrganizadora = undefined" *ngIf="idEntidadOrganizadora != undefined">
+              <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ac.L_EN_HONOR_A}}</mat-label>
+            <mat-select #titularForm [(ngModel)]="idTitular">
+              <mat-option>...</mat-option>
+              <mat-option [value]="titular.id" *ngFor="let titular of titularesFiltro">
+                {{titular | nombreTitularConEntidad}}
+              </mat-option>
+            </mat-select>
+            <button matSuffix mat-icon-button matTooltip="{{ac.L_LIMPIAR}}" (click)="idTitular = undefined" *ngIf="idTitular != undefined">
+              <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+        <div class="row column-lt-md flex-auto-childs">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ac.LUGAR}}</mat-label>
+            <mat-select #lugarForm [(ngModel)]="idLugar">
+              <mat-option>...</mat-option>
+              <mat-option [value]="lugar.id" *ngFor="let lugar of lugaresFiltro">
+                {{lugar | nombreLugarCompletoPipe}}
+              </mat-option>
+            </mat-select>
+            <button matSuffix mat-icon-button matTooltip="{{ac.L_LIMPIAR}}" (click)="idLugar = undefined" *ngIf="idLugar != undefined">
+              <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+            </button>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ac.PERSONA}}</mat-label>
+            <mat-select #personaForm [(ngModel)]="idPersona">
+              <mat-option>...</mat-option>
+              <mat-option [value]="persona.id" *ngFor="let persona of personasFiltro">
+                {{persona.nombre}}
+              </mat-option>
+            </mat-select>
+            <button matSuffix mat-icon-button matTooltip="{{ac.L_LIMPIAR}}" (click)="idPersona = undefined" *ngIf="idPersona != undefined">
+              <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div id="listado-conmutadores" class="row justify-between">
+      <div class="row">
+        <mat-chip-listbox *ngFor="let tipoEntidad of tiposEntidad">
+          <mat-chip-option color="primary" matTooltip="{{tipoEntidad.nombreSingular}}" [selected]="contieneTipoEntidad(tipoEntidad.id)"
+            (click)="cambiarTipoEntidad(tipoEntidad.id)">
+            {{tipoEntidad.acronimo}}
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <mat-chip-listbox *ngFor="let caracter of caracteres">
+          <mat-chip-option [color]="caracter.acronimo | lowercase" matTooltip="{{caracter.nombre}}" [selected]="contieneCaracter(caracter.id)"
+            (click)="cambiarCaracter(caracter.id)">
+            {{caracter.acronimo}}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+      <div class="row">
+        <mat-chip-listbox>
+          <mat-chip-option color="no-visible" matTooltip="{{ac.CRIT_NO_VISIBLES}}" [selected]="isCheckedNoVisibles"
+            (click)="isCheckedNoVisibles = !isCheckedNoVisibles" [disabled]="isCheckedPendientesDuplicar">
+            <mat-icon>{{ac.I_NO_VISIBLE}}</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <mat-chip-listbox>
+          <mat-chip-option color="aplazado" matTooltip="{{ac.L_APLAZADOS}}" [selected]="isCheckedAplazados"
+            (click)="isCheckedAplazados = !isCheckedAplazados" [disabled]="tipoBusqueda == ac.L_TIPO_BUSQUEDA_DIRECTO || isCheckedPendientesDuplicar">
+            <mat-icon>{{ac.I_APLAZADO}}</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <mat-chip-listbox>
+          <mat-chip-option color="suspendido" matTooltip="{{ac.L_SUSPENDIDOS}}" [selected]="isCheckedSuspendidos"
+            (click)="isCheckedSuspendidos = !isCheckedSuspendidos" [disabled]="tipoBusqueda == ac.L_TIPO_BUSQUEDA_DIRECTO || isCheckedPendientesDuplicar">
+            <mat-icon>{{ac.I_SUSPENDIDO}}</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <mat-chip-listbox>
+          <mat-chip-option color="extraordinario" matTooltip="{{ac.L_EXTRAORDINARIOS}}" [selected]="isCheckedExtraordinarios"
+            (click)="isCheckedExtraordinarios = !isCheckedExtraordinarios" [disabled]="isCheckedPendientesDuplicar">
+            <mat-icon>{{ac.I_EXTRAORDINARIO}}</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <mat-chip-listbox>
+          <mat-chip-option color="revisar" matTooltip="{{ac.L_PENDIENTES_REVISAR}}" [selected]="isCheckedPendientesRevisar"
+            (click)="isCheckedPendientesRevisar = !isCheckedPendientesRevisar" [disabled]="isCheckedPendientesDuplicar">
+            <mat-icon>{{ac.I_PENDIENTE_REVISAR}}</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <mat-chip-listbox>
+          <mat-chip-option color="duplicar" matTooltip="{{ac.L_PENDIENTE_DUPLICAR}}" [selected]="isCheckedPendientesDuplicar"
+            (click)="cambiarDuplicar()" [disabled]="tipoBusqueda == ac.L_TIPO_BUSQUEDA_DIRECTO">
+            <mat-icon>{{ac.I_DUPLICAR}}</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+    </div>
+
+    <mat-progress-bar mode="indeterminate" *ngIf="mostrarCargando"></mat-progress-bar>
+
+    <div id="listado-resultados">
+      <mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <ng-container *ngIf="element.eventoPadre != null; then conEventoPadre; else sinEventoPadre"></ng-container>
+            <ng-template #conEventoPadre>
+              <mat-label matTooltip="ID Evento padre: {{element.eventoPadre.id}}">{{element.id}}</mat-label>
+            </ng-template>
+            <ng-template #sinEventoPadre>
+              <mat-label class="evento-padre">{{element.id}}</mat-label>
+            </ng-template>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="fecha">
+          <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{element.fecha | date:'dd-MM-yyyy'}}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="hora">
+          <mat-header-cell *matHeaderCellDef>Hora</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{(!element.horaFin1 && !element.horaIni2 && !element.horaFin2) ? 'Todo el día' : element.horaIni1 | horaSinSegundos}}
+            {{element.horaFin1 ? ' - ' + (element.horaFin1 | horaSinSegundos) : ''}}
+            {{element.horaIni2 ? ' / ' + (element.horaIni2 | horaSinSegundos) : ''}}
+            {{element.horaFin2 ? ' - ' + (element.horaFin2 | horaSinSegundos) : ''}}
+            {{!element.horaFin1 && element.horaFin2 ? '(Día siguiente)' : ''}}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="caracter">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-chip-listbox *ngIf="element.caracter != null">
+              <mat-chip [color]="element.caracter.acronimo | lowercase">
+                {{element.caracter.acronimo}}
+              </mat-chip>
+            </mat-chip-listbox>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="entidadOrganizadora">
+          <mat-header-cell *matHeaderCellDef>{{ac.ENTIDAD}} organizadora</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <img class="avatar-1x" matTooltip="{{element.entidadOrganizadora.codigo}}" [src]="element.entidadOrganizadora | rutaAvatarEntidad">
+            <mat-label>{{element.entidadOrganizadora | nombreEntidadCompleto}}</mat-label>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="tipoActoCulto">
+          <mat-header-cell *matHeaderCellDef>{{ac.TIPO_ACTO_CULTO}}</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-label>
+              {{element.tipoActoCulto.nombreSingular}}
+              {{element.dia > 0 ? '(' + element.dia : ''}}{{element.dia > 1 ? 'º día)' : element.dia > 0 ? 'er día)' : ''}}
+              {{element.tipo ? '- ' + element.tipo : ''}}
+              {{element.edicion > 0 ? '(' + element.edicion + 'ª edición)' : ''}}
+              {{element.aniversario > 0 ? '(' + element.aniversario : ''}}{{element.aniversario > 1 ? 'º aniversario)' : element.aniversario > 0 ? 'er aniversario)' : ''}}
+            </mat-label>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="titular">
+          <mat-header-cell *matHeaderCellDef>{{ac.L_EN_HONOR_A}}</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element | titularesEvento}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+          <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-chip-listbox>
+              <mat-chip
+                [class.parpadeo-lento]="element.estado === ac.G_EST_DIRECTO"
+                [color]="
+                  element.estado === ac.L_SUSPENDIDO ||
+                  element.estado === ac.L_APLAZADO ||
+                  element.estado === ac.L_FINALIZADO ||
+                  element.estado === ac.G_EST_DIRECTO ? (element.estado | lowercase) : 'planificado'">
+                {{element.estado}}
+              </mat-chip>
+            </mat-chip-listbox>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="visible">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-icon color="no-visible" matTooltip="{{ac.L_NO_VISIBLE}}" *ngIf="!mostrarIconoVisible(element)">{{ac.I_NO_VISIBLE}}</mat-icon>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="extraordinario">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-icon color="extraordinario" matTooltip="{{ac.L_EXTRAORDINARIO}}" *ngIf="element.extraordinario">{{ac.I_EXTRAORDINARIO}}</mat-icon>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="pendienteRevisar">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-icon
+              [class.parpadeo-rapido]="obtenerSeveridadRevisar(element) == ac.L_CRITICO_ACRONIMO"
+              [class.parpadeo-lento]="obtenerSeveridadRevisar(element) == ac.L_GRAVE_ACRONIMO"
+              [color]="
+                obtenerSeveridadRevisar(element) == ac.L_CRITICO_ACRONIMO ? 'critico' :
+                obtenerSeveridadRevisar(element) == ac.L_GRAVE_ACRONIMO ? 'grave' :
+                obtenerSeveridadRevisar(element) == ac.L_MODERADO_ACRONIMO ? 'moderado' : 'leve'"
+              [matTooltip]="obtenerTipoRevisar(element) ? ac.L_PENDIENTE_REVISAR : ac.G_VAL_SIN_REGLA"
+              *ngIf="mostrarIconoRevisar(element)">
+              {{obtenerTipoRevisar(element) ? ac.I_PENDIENTE_REVISAR : ac.I_REGLA}}
+            </mat-icon>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="ver">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_VER}}" (click)="irADetalle(modoVer, element)" >
+              <mat-icon color="ver">{{ac.I_VER}}</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="editar" *ngIf="esAdministrador">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_EDITAR}}" (click)="irADetalle(modoEditar, element)">
+              <mat-icon color="editar">{{ac.I_EDITAR}}</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="duplicar" *ngIf="esAdministrador">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_DUPLICAR}}" (click)="irADetalle(modoDuplicar, element)"
+              *ngIf="mostrarIconoDuplicar(element)">
+              <mat-icon
+                [color]="
+                  obtenerSeveridadDuplicar(element) == ac.L_CRITICO_ACRONIMO ? 'critico' :
+                  obtenerSeveridadDuplicar(element) == ac.L_GRAVE_ACRONIMO ? 'grave' :
+                  obtenerSeveridadDuplicar(element) == ac.L_MODERADO_ACRONIMO ? 'moderado' : 'leve'">
+                {{ac.I_DUPLICAR}}
+              </mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="eliminar" *ngIf="esAdministrador">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_ELIMINAR}}" (click)="eliminar(element)">
+              <mat-icon color="eliminar">{{ac.I_ELIMINAR}}</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'evento-hoy': utilsDate.esHoy(row.fecha)}"></mat-row>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell sin-resultados" colspan="4">{{ac.G_VAL_SIN_RESULTADOS_TABLA}}</td>
+        </tr>
+      </mat-table>
+      <mat-paginator [length]="totalItems" [pageIndex]="currentPage" [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 50, 100]" showFirstLastButtons (page)="cambiarPaginacion($event)">
+      </mat-paginator>
+    </div>
+  </div>
+</div>

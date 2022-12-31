@@ -1,0 +1,26 @@
+@use "@angular/material" as mat;
+@import "../../../../assets/styles/palettes.scss";
+
+.sidenav-contenedor {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  > mat-toolbar {
+    img { margin-right: 0.5rem; vertical-align: middle; }
+    img:hover { cursor: pointer; }
+  }
+  > mat-sidenav-container { flex: 1; } /* Cuando el sidenav no está fijo, estiramos el contenedor sidenav para llenar el espacio disponible. Este hace que `<mat-sidenav-content>` actúe como nuestro elemento de desplazamiento para diseños de escritorio. */
+  .item-menu-active {
+    color: mat.get-color-from-palette($palette-accent, 900) !important;
+    .tema-oscuro & { color: mat.get-color-from-palette($palette-accent) !important; }
+  }
+  // lt-sm
+  @media screen and (max-width: 599px) {
+    > mat-toolbar { position: fixed; z-index: 2; } /* Nos aseguramos de que la barra de herramientas permanezca en la parte superior del contenido a medida que se desplaza. */
+    > mat-sidenav-container { flex: 1 0 auto; margin-top: 56px; } /* Cuando el sidenav está fijo, no restrinjimos la altura del contenedor sidenav. Esto hace que `<body>` actúe como nuestro elemento de desplazamiento para diseños móviles. */
+  }
+}

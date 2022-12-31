@@ -1,0 +1,11 @@
+<div>
+  <mat-label class="severidad">{{accesoDirecto?.titulo}}</mat-label>
+  <mat-icon class="icono material-icons-outlined" color="primary" matTooltip="{{accesoDirecto?.descripcion}}"
+    [matTooltipPosition]="'above'" *ngIf="accesoDirecto?.descripcion">
+    info
+  </mat-icon>
+</div>
+<mat-label class="numero {{accesoDirecto?.classNumero}}" [class.pointer]="accesoDirecto?.ruta"
+  (click)="accesoDirecto?.ruta ? navegar() : ''">
+  {{accesoDirecto?.numero | number}}
+</mat-label>

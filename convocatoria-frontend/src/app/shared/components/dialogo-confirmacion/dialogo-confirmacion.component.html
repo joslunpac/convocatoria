@@ -1,0 +1,8 @@
+<div mat-dialog-title>{{tituloPagina}}</div>
+<mat-dialog-content id="detalle-campos">
+  {{data.mensaje}}
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cerrar(false)" cdkFocusInitial>No</button>
+  <button mat-button (click)="cerrar(true)">Sí</button>
+</mat-dialog-actions>

@@ -1,0 +1,21 @@
+@use "@angular/material" as mat;
+@import "../../../../assets/styles/palettes.scss";
+
+.auth-contenedor {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  background-image: url("/assets/img/fondo.jpg");
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  mat-card {
+    max-width: 600px;
+    box-shadow: none !important;
+    background-color: mat.get-color-from-palette($palette-primary, 100);
+  }
+  img { cursor: pointer; }
+}

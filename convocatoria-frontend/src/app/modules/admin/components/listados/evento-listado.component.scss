@@ -1,0 +1,17 @@
+.mat-column-id {
+  .evento-padre { font-weight: bold; }
+}
+.mat-column-fecha { flex: 0 0 117px; }
+.mat-column-hora { flex: 0 0 135px; }
+.mat-column-caracter { flex: 0 0 70px; }
+.mat-column-entidadOrganizadora,
+.mat-column-tipoActoCulto,
+.mat-column-titular { flex: 1 0 170px; }
+.mat-column-estado { flex: 0 0 140px; }
+.mat-column-visible,
+.mat-column-extraordinario,
+.mat-column-pendienteRevisar { flex: 0 0 73px; }
+.evento-hoy {
+  border-left: 5px solid yellowgreen;
+  .mat-column-id { margin-left: -5px; }
+}

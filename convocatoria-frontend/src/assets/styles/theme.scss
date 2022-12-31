@@ -1,0 +1,329 @@
+@use "@angular/material" as mat;
+@import "./palettes.scss";
+
+@include mat.core();
+
+// Definimos la tipografía de la aplicación
+$my-typography: mat.define-typography-config($font-family: 'Inter');
+
+// Definimos el tema claro
+$my-light-theme: mat.define-light-theme((
+  color: (
+    primary: $palette-primary,
+    accent: $palette-accent
+  ),
+  typography: $my-typography,
+));
+
+// Aplicamos el tema claro por defecto
+@include mat.core-theme($my-light-theme);
+@include mat.all-component-themes($my-light-theme);
+
+// Aplicamos el tema oscuro sólo cuándo se aplica la clase CSS '.tema-oscuro'
+.tema-oscuro {
+  // Definimos el tema oscuro
+  $my-dark-theme: mat.define-dark-theme((
+    color: (
+      primary: $palette-primary,
+      accent: $palette-accent
+    )
+  ));
+
+  @include mat.core-color($my-dark-theme);
+  @include mat.all-component-colors($my-dark-theme);
+}
+
+
+// Generales //
+///////////////
+// Color de fondo del toolbar
+mat-toolbar {
+  .tema-oscuro & { background-color: mat.get-color-from-palette($palette-primary, 800) !important; }
+}
+// Color de fondo de la pagina
+.mat-drawer-container {
+  background-color: mat.get-color-from-palette($palette-primary, 100);
+  .tema-oscuro & { background-color: mat.get-color-from-palette($palette-primary, 800); }
+}
+// Color de fondo de las tarjetas
+mat-card {
+  .tema-oscuro & { background-color: mat.get-color-from-palette($palette-primary, 700); }
+}
+// Color de fondo de resalte
+[id*="con-fondo"], [class*="con-fondo"] {
+  background-color: mat.get-color-from-palette($palette-primary, 300);
+  .tema-oscuro & { background-color: mat.get-color-from-palette($palette-primary, 700); }
+}
+
+// Color primario
+.primary { color: mat.get-color-from-palette($palette-primary); }
+mat-chip.mat-primary {
+  background-color: mat.get-color-from-palette($palette-primary, 0.54) !important;
+  color: mat.get-color-from-palette($palette-primary, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-primary, "darker-contrast") !important; }
+}
+
+// Color transparente
+mat-chip-option.mat-transparente {
+  background-color: transparent !important;
+}
+
+
+// Roles //
+///////////
+// ROLE_ADMINISTRADOR
+.administrador { color: mat.get-color-from-palette($palette-administrador); }
+mat-chip.mat-administrador {
+  background-color: mat.get-color-from-palette($palette-administrador, 0.54) !important;
+  color: mat.get-color-from-palette($palette-administrador, "lighter-contrast") !important;
+  .tema-oscuro & { color: white !important; }
+}
+
+// ROLE_MODERADOR
+.moderador { color: mat.get-color-from-palette($palette-moderador); }
+mat-chip.mat-moderador {
+  background-color: mat.get-color-from-palette($palette-moderador, 0.54) !important;
+  color: mat.get-color-from-palette($palette-moderador, "lighter-contrast") !important;
+  .tema-oscuro & { color: white !important; }
+}
+
+// ROLE_USUARIO
+.usuario { color: mat.get-color-from-palette($palette-usuario); }
+mat-chip.mat-usuario {
+  background-color: mat.get-color-from-palette($palette-usuario, 0.54) !important;
+  color: mat.get-color-from-palette($palette-usuario, "lighter-contrast") !important;
+  .tema-oscuro & { color: white !important; }
+}
+
+
+// Tiempo //
+////////////
+// Hoy
+.hoy,
+mat-icon.mat-hoy { color: mat.get-color-from-palette($palette-hoy); }
+
+// Mañana
+.manana,
+mat-icon.mat-manana { color: mat.get-color-from-palette($palette-manana); }
+
+
+// Severidad //
+///////////////
+// Crítico
+.critico,
+mat-icon.mat-critico { color: mat.get-color-from-palette($palette-critico); }
+
+// Grave
+.grave,
+mat-icon.mat-grave { color: mat.get-color-from-palette($palette-grave); }
+
+// Moderado
+.moderado,
+mat-icon.mat-moderado { color: mat.get-color-from-palette($palette-moderado); }
+
+// Leve
+.leve,
+mat-icon.mat-leve { color: mat.get-color-from-palette($palette-leve); }
+
+
+// Acciones //
+//////////////
+// Buscar
+.mat-back-buscar { background-color: mat.get-color-from-palette($palette-buscar) !important; }
+
+// Crear
+.mat-back-crear { background-color: mat.get-color-from-palette($palette-crear) !important; }
+
+// Ver
+mat-icon.mat-ver { color: mat.get-color-from-palette($palette-ver) !important; }
+
+// Editar
+mat-icon.mat-editar { color: mat.get-color-from-palette($palette-editar) !important; }
+
+// Duplicar
+.duplicar,
+mat-icon.mat-duplicar { color: mat.get-color-from-palette($palette-duplicar) !important; }
+mat-chip.mat-duplicar, mat-chip-option.mat-duplicar {
+  background-color: mat.get-color-from-palette($palette-duplicar, 0.54) !important;
+  color: mat.get-color-from-palette($palette-duplicar, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-duplicar, "darker-contrast") !important; }
+}
+
+// Eliminar
+mat-icon.mat-eliminar { color: mat.get-color-from-palette($palette-eliminar) !important; }
+
+
+// criterios //
+///////////////
+// Visible
+.visible,
+mat-icon.mat-visible { color: mat.get-color-from-palette($palette-visible); }
+mat-checkbox.mat-visible.mat-checkbox-checked {
+  :not(.mat-disabled) {
+    .mat-checkbox-background { background-color: mat.get-color-from-palette($palette-visible); }
+  }
+}
+mat-chip-option.mat-visible {
+  background-color: mat.get-color-from-palette($palette-visible, 0.54) !important;
+  color: mat.get-color-from-palette($palette-visible, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-visible, "darker-contrast") !important; }
+}
+
+// No visible
+.no-visible,
+mat-icon.mat-no-visible { color: mat.get-color-from-palette($palette-no-visible); }
+mat-chip-option.mat-no-visible {
+  background-color: mat.get-color-from-palette($palette-no-visible, 0.54) !important;
+  color: mat.get-color-from-palette($palette-no-visible, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-no-visible, "darker-contrast") !important; }
+}
+
+// Extraordinario
+.extraordinario,
+mat-icon.mat-extraordinario { color: mat.get-color-from-palette($palette-extraordinario); }
+mat-checkbox.mat-extraordinario.mat-checkbox-checked {
+  :not(.mat-disabled) {
+    .mat-checkbox-background { background-color: mat.get-color-from-palette($palette-extraordinario); }
+  }
+}
+mat-chip-option.mat-extraordinario {
+  background-color: mat.get-color-from-palette($palette-extraordinario, 0.54) !important;
+  color: mat.get-color-from-palette($palette-extraordinario, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-extraordinario, "darker-contrast") !important; }
+}
+
+// Pendiente de revisar
+.revisar,
+mat-icon.mat-revisar { color: mat.get-color-from-palette($palette-revisar); }
+mat-checkbox.mat-revisar.mat-checkbox-checked {
+  :not(.mat-disabled) {
+    .mat-checkbox-background { background-color: mat.get-color-from-palette($palette-revisar); }
+  }
+}
+mat-chip-option.mat-revisar {
+  background-color: mat.get-color-from-palette($palette-revisar, 0.54) !important;
+  color: mat.get-color-from-palette($palette-revisar, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-revisar, "darker-contrast") !important; }
+}
+
+// Masculino
+.masculino,
+mat-icon.mat-masculino { color: mat.get-color-from-palette($palette-masculino); }
+mat-chip-option.mat-masculino {
+  background-color: mat.get-color-from-palette($palette-masculino, 0.54) !important;
+  color: mat.get-color-from-palette($palette-masculino, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-masculino, "darker-contrast") !important; }
+}
+
+// Femenino
+.femenino,
+mat-icon.mat-femenino { color: mat.get-color-from-palette($palette-femenino); }
+mat-chip-option.mat-femenino {
+  background-color: mat.get-color-from-palette($palette-femenino, 0.54) !important;
+  color: mat.get-color-from-palette($palette-femenino, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-femenino, "darker-contrast") !important; }
+}
+
+// Sin genero
+.sin-genero,
+mat-icon.mat-sin-genero { color: mat.get-color-from-palette($palette-sin-genero); }
+mat-chip-option.mat-sin-genero {
+  background-color: mat.get-color-from-palette($palette-sin-genero, 0.54) !important;
+  color: mat.get-color-from-palette($palette-sin-genero, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-sin-genero, "darker-contrast") !important; }
+}
+
+
+// Carácteres //
+////////////////
+// SAC
+mat-checkbox.mat-sac.mat-checkbox-checked {
+  :not(.mat-disabled) {
+    .mat-checkbox-background { background-color: mat.get-color-from-palette($palette-sac); }
+  }
+}
+mat-chip.mat-sac, mat-chip-option.mat-sac {
+  background-color: mat.get-color-from-palette($palette-sac, 0.54) !important;
+  color: mat.get-color-from-palette($palette-sac, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-sac, "darker-contrast") !important; }
+}
+
+// GLO
+mat-checkbox.mat-glo.mat-checkbox-checked {
+  :not(.mat-disabled) {
+    .mat-checkbox-background { background-color: mat.get-color-from-palette($palette-glo); }
+  }
+}
+mat-chip.mat-glo, mat-chip-option.mat-glo {
+  background-color: mat.get-color-from-palette($palette-glo, 0.54) !important;
+  color: mat.get-color-from-palette($palette-glo, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-glo, "darker-contrast") !important; }
+}
+
+// PEN
+mat-checkbox.mat-pen.mat-checkbox-checked {
+  :not(.mat-disabled) {
+    .mat-checkbox-background { background-color: mat.get-color-from-palette($palette-pen); }
+  }
+}
+mat-chip.mat-pen, mat-chip-option.mat-pen {
+  background-color: mat.get-color-from-palette($palette-pen, 0.54) !important;
+  color: mat.get-color-from-palette($palette-pen, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-pen, "darker-contrast") !important; }
+}
+
+
+// Estados de los eventos //
+////////////////////////////
+// Aplazado
+.aplazado,
+mat-icon.mat-aplazado { color: mat.get-color-from-palette($palette-aplazado); }
+mat-checkbox.mat-aplazado.mat-checkbox-checked {
+  :not(.mat-disabled) {
+    .mat-checkbox-background { background-color: mat.get-color-from-palette($palette-aplazado); }
+  }
+}
+mat-chip.mat-aplazado, mat-chip-option.mat-aplazado {
+  background-color: mat.get-color-from-palette($palette-aplazado, 0.54) !important;
+  color: mat.get-color-from-palette($palette-aplazado, "lighter-contrast") !important;
+  .tema-oscuro & { color: white !important; }
+}
+
+// Suspendido
+.suspendido,
+mat-icon.mat-suspendido { color: mat.get-color-from-palette($palette-suspendido); }
+mat-checkbox.mat-suspendido.mat-checkbox-checked {
+  :not(.mat-disabled) {
+    .mat-checkbox-background { background-color: mat.get-color-from-palette($palette-suspendido); }
+  }
+}
+mat-chip.mat-suspendido, mat-chip-option.mat-suspendido {
+  background-color: mat.get-color-from-palette($palette-suspendido, 0.54) !important;
+  color: mat.get-color-from-palette($palette-suspendido, "lighter-contrast") !important;
+  .tema-oscuro & { color: white !important; }
+}
+
+// Finalizado
+.finalizado { color: mat.get-color-from-palette($palette-finalizado); }
+mat-chip.mat-finalizado, mat-chip-option.mat-finalizado {
+  background-color: mat.get-color-from-palette($palette-finalizado, 0.54) !important;
+  color: mat.get-color-from-palette($palette-finalizado, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-finalizado, "darker-contrast") !important; }
+}
+
+// Directo
+.directo,
+mat-icon.mat-directo { color: mat.get-color-from-palette($palette-directo); }
+mat-chip.mat-directo, mat-chip-option.mat-directo {
+  background-color: mat.get-color-from-palette($palette-directo, 0.54) !important;
+  color: mat.get-color-from-palette($palette-directo, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-directo, "darker-contrast") !important; }
+}
+
+// Planificado
+.planificado { color: mat.get-color-from-palette($palette-planificado); }
+mat-chip.mat-planificado, mat-chip-option.mat-planificado {
+  background-color: mat.get-color-from-palette($palette-planificado, 0.54) !important;
+  color: mat.get-color-from-palette($palette-planificado, "lighter-contrast") !important;
+  .tema-oscuro & { color: mat.get-color-from-palette($palette-planificado, "darker-contrast") !important; }
+}

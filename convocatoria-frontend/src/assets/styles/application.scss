@@ -1,0 +1,173 @@
+@use "@angular/material" as mat;
+@import "./theme.scss";
+@import "./palettes.scss";
+
+// General //
+/////////////
+body { font-family: Inter, Roboto, "Helvetica Neue", sans-serif; margin: 0; }
+.pointer { cursor: pointer; }
+.enlace { text-decoration: underline; cursor: pointer; margin-left: 5px; }
+.parpadeo-rapido, .parpadeo-lento {
+  animation-name: parpadeo;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-name: parpadeo;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
+.parpadeo-rapido { animation-duration: 0.5s; -webkit-animation-duration: 0.5s; }
+.parpadeo-lento { animation-duration: 1s; -webkit-animation-duration: 1s; }
+
+@-moz-keyframes parpadeo {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@-webkit-keyframes parpadeo {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+@keyframes parpadeo {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+
+// Secciones de la aplicación //
+////////////////////////////////
+#contenedor {
+  display: flex;
+  flex-direction: column;
+  > * { padding: 1rem; }
+}
+[id*="cabecera"],
+[id*="seccion"] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  img { width: 56px; height: 56px; border-radius: 50%; }
+  .titulo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    > :nth-child(2) { font-size: 15px; opacity: .7; }
+  }
+  .acciones {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+[id*="cabecera"] {
+  .titulo > :nth-child(1) { font-size: 25px; font-weight: 500; }
+}
+[id*="seccion"] {
+  .titulo > :nth-child(1) { font-size: 20px; font-weight: 500; }
+}
+#listado-filtros {
+  .mat-mdc-form-field-subscript-wrapper { display: none; }
+}
+#listado-resultados {
+  [class*="avatar"] { margin-right: 10px; }
+  .mat-column-id { flex: 0 0 73px; }
+  .mat-column-ver,
+  .mat-column-editar,
+  .mat-column-duplicar,
+  .mat-column-editar,
+  .mat-column-actualizarPassword,
+  .mat-column-eliminar { flex: 0 0 50px; justify-content: center; }
+  .sin-resultados { padding-top: 1rem;}
+}
+#detalle-campos {
+  /* TODO
+  .mat-tab-body-wrapper { margin-top: 10px; }
+  .mat-form-field-prefix mat-icon {
+    color: rgba(0, 0, 0, 0.54);
+    .tema-oscuro & { color: inherit; }
+  }
+  TODO */
+}
+
+
+// Imágenes //
+//////////////
+.avatar-0x { width: 25px; height: 25px; border-radius: 50%; }
+.avatar-1x { width: 40px; height: 40px; border-radius: 50%; }
+.avatar-2x { width: 50px; height: 50px; border-radius: 50%; }
+.avatar-3x { width: 182px; height: 182px; border-radius: 50%; max-width: 182px; }
+.avatar-focus { outline: 5px solid mat.get-color-from-palette($palette-accent); }
+
+
+// Modificación de componentes de Angular Material //
+/////////////////////////////////////////////////////
+mat-card {
+  border-radius: 0 !important;
+  box-shadow: 0px 2px 3px 0px rgb(0 0 0 / 10%), 0px 1px 2px -1px rgb(0 0 0 / 10%) !important;
+  > mat-icon { position: absolute; top: 0; right: 0; margin: 15px 20px 0px 0px; }
+  mat-card-subtitle { margin-bottom: 1rem !important; }
+  mat-card-actions {
+    padding: 16px !important;
+    > * { flex: auto; }
+  }
+}
+mat-tab-group {
+  mat-tab-header {
+    margin-bottom: 1rem;
+    .mat-mdc-tab-labels mat-icon { margin-right: 8px; }
+  }
+}
+mat-table {
+  width:100%;
+  max-width: 100%;
+  overflow: auto;
+  background: inherit !important;
+}
+mat-paginator { background: inherit !important; }
+mat-progress-bar { margin-bottom: -4px; }
+mat-chip-option mat-icon { margin-top: 5px; }
+
+
+// Componentes propios de la aplicación //
+//////////////////////////////////////////
+app-acceso-directo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  .severidad { opacity: .7; }
+  .icono { font-size: 18px; height: inherit; width: auto; }
+  .numero { font-size: 30px; }
+  > * { display: flex; gap: 0.5rem; }
+}
+app-mensaje-error {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  mat-label { color: red; }
+}
+
+/* TODO
+.mat-filter {
+  .tema-oscuro & { background-color: #424242 !important; }
+  .noResultsMessage {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    .tema-oscuro & { color: white !important; }
+  }
+}
+.mat-filter-input {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  .tema-oscuro & { color: white !important; }
+}
+TODO */

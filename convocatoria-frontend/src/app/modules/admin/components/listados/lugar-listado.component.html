@@ -1,0 +1,73 @@
+<div id="contenedor">
+  <div id="cabecera">
+    <div class="titulo">
+      <mat-label>{{titulo}}</mat-label>
+      <mat-label class="hide-lt-sm">{{descripcion}}</mat-label>
+    </div>
+    <div class="acciones">
+      <button mat-mini-fab class="mat-elevation-z2" color="back-crear" matTooltip="{{ac.L_CREAR}}" (click)="irADetalle()" *ngIf="esAdministrador">
+        <mat-icon>{{ac.I_CREAR}}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="column">
+    <div id="listado-filtros" class="row flex-auto-childs">
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>{{ac.I_BUSCAR}}</mat-icon>
+        <mat-label>{{ac.L_FILTRO_BUSQUEDA}}</mat-label>
+        <input matInput (keyup)="cambiarFiltroBusqueda($event)" placeholder="{{ac.L_FILTRO_BUSQUEDA_PLACEHOLDER}}" #input>
+        <button matSuffix mat-icon-button matTooltip="{{ac.L_LIMPIAR}}" (click)="input.value = ''; cambiarFiltroBusqueda($event, true)" *ngIf="input.value">
+          <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <div id="listado-resultados">
+      <mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="nombre">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.nombre}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="direccion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Dirección</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.direccion}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="ver">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_VER}}" (click)="irADetalle(modoVer, element)" >
+              <mat-icon color="ver">{{ac.I_VER}}</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="editar" *ngIf="esAdministrador">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_EDITAR}}" (click)="irADetalle(modoEditar, element)">
+              <mat-icon color="editar">{{ac.I_EDITAR}}</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="eliminar" *ngIf="esAdministrador">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_ELIMINAR}}" (click)="eliminar(element)">
+              <mat-icon color="eliminar">{{ac.I_ELIMINAR}}</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell sin-resultados" colspan="4">{{ac.G_VAL_SIN_RESULTADOS_TABLA}}</td>
+        </tr>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 50, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div>

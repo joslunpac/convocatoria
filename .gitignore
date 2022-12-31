@@ -1,0 +1,61 @@
+### Común ###
+*.classpath
+*.project
+*.settings
+*.log
+*.zip
+*.tar.gz
+*.rar
+*.vscode/
+
+
+
+### convocatoria-backend ###
+# Maven
+convocatoria-backend/target
+convocatoria-backend/.mvn
+
+# Archivos de clase compilado
+convocatoria-backend/*.class
+
+# Archivos de paquete
+convocatoria-backend/*.jar
+convocatoria-backend/*.war
+convocatoria-backend/*.nar
+convocatoria-backend/*.ear
+
+# STS
+convocatoria-backend/.apt_generated
+convocatoria-backend/.factorypath
+convocatoria-backend/.springBeans
+convocatoria-backend/.sts4-cache
+
+
+
+### convocatoria-frontend ###
+# Compilación
+convocatoria-frontend/dist
+convocatoria-frontend/tmp
+convocatoria-frontend/out-tsc
+
+# Dependencias
+convocatoria-frontend/node_modules
+
+# IDEs and editors
+*.launch
+*.sublime-workspace
+
+# Otros
+convocatoria-frontend/.angular/cache
+convocatoria-frontend/.sass-cache
+convocatoria-frontend/connect.lock
+convocatoria-frontend/coverage
+convocatoria-frontend/libpeerconnection.log
+convocatoria-frontend/npm-debug.log
+convocatoria-frontend/yarn-error.log
+convocatoria-frontend/testem.log
+convocatoria-frontend/typings
+
+# Sistema de ficheros
+convocatoria-frontend/.DS_Store
+convocatoria-frontend/Thumbs.db

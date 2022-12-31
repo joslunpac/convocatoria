@@ -1,0 +1,23 @@
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div mat-dialog-title>{{tituloPagina}}</div>
+
+  <mat-dialog-content id="detalle-campos">
+    <mat-form-field [hintLabel]="!this.modoVer ? 'Exact: 3 carácteres' : ''" appearance="fill">
+      <mat-label>Acrónimo</mat-label>
+      <input matInput #acronimoForm formControlName="acronimo" minlength="3" maxlength="3">
+      <mat-hint align="end" *ngIf="!this.modoVer">{{(acronimoForm.value != null && acronimoForm.value.length) || 0}}/3</mat-hint>
+      <mat-error *ngIf="mostrarValidacion('acronimo', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+    <mat-form-field [hintLabel]="!this.modoVer ? 'Max: 50 carácteres' : ''" appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput #nombreForm formControlName="nombre" maxlength="50">
+      <mat-hint align="end" *ngIf="!this.modoVer">{{(nombreForm.value != null && nombreForm.value.length) || 0}}/50</mat-hint>
+      <mat-error *ngIf="mostrarValidacion('nombre', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-dialog-close mat-flat-button type="button" cdkFocusInitial>{{ac.L_CANCELAR}}</button>
+    <button mat-flat-button type="submit" [disabled]="!form.valid" color="accent" *ngIf="!modoVer">{{ac.L_GUARDAR}}</button>
+  </mat-dialog-actions>
+</form>

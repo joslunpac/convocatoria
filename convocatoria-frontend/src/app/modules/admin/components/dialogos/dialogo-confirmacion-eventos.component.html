@@ -1,0 +1,11 @@
+<div mat-dialog-title>{{tituloPagina}}</div>
+
+<mat-dialog-content id="detalle-campos">
+    {{data.mensaje}}
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button (click)="cerrar('N')" cdkFocusInitial>{{data.esPadre ? 'No' : 'Cancelar'}}</button>
+    <button mat-button (click)="cerrar('S')" *ngIf="!data.esPadre">Sólo éste</button>
+    <button mat-button (click)="cerrar('T')">{{data.esPadre ? 'Si' : 'Todos'}}</button>
+</mat-dialog-actions>

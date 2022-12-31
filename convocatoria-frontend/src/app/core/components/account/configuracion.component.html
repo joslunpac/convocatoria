@@ -1,0 +1,17 @@
+<div id="contenedor">
+  <div id="cabecera con-fondo">
+    <div class="titulo">
+      <mat-label>{{ac.CONFIGURACION}}</mat-label>
+      <mat-label>Personaliza tu experiencia de usuario</mat-label>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="row">
+      <mat-label>Tema</mat-label>
+      <mat-icon matTooltip="Tema claro">light_mode</mat-icon>
+      <mat-slide-toggle [checked]="temaService.comprobarSiTemaOscuro()" (change)="cambiarTema()"></mat-slide-toggle>
+      <mat-icon matTooltip="Tema oscuro">dark_mode</mat-icon>
+    </div>
+  </div>
+</div>

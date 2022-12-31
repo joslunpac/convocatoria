@@ -1,0 +1,49 @@
+<form [formGroup]="form" (ngSubmit)="signin()">
+  <div class="auth-contenedor">
+    <mat-card>
+      <mat-card-header>
+        <div class="row align-center">
+          <img mat-card-avatar [src]="ac.RUTA_IMAGENES + 'logo.png'" routerLink="{{ac.HOME_ROUTE}}"/>
+          <div>
+            <mat-card-title>Entra en {{ac.APP_NOMBRE}}</mat-card-title>
+            <mat-card-subtitle>
+              <mat-label>¿Todavía no tienes cuenta?</mat-label>
+              <mat-label class="enlace" routerLink="{{'/' + ac.SIGNUP_ROUTE}}">Regístrate</mat-label>
+            </mat-card-subtitle>
+          </div>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="column">
+          <app-mensaje-error [mensajeError]="mensajeError" *ngIf="mensajeError != null"></app-mensaje-error>
+          <div class="row flex-auto-childs">
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input type="email" matInput #emailForm formControlName="email">
+              <mat-error *ngIf="mostrarValidacion('email', 'email') && !mostrarValidacion('email', 'required')">{{ac.G_VAL_EMAIL_INVALIDO}}</mat-error>
+              <mat-error *ngIf="mostrarValidacion('email', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+            </mat-form-field>
+            <mat-form-field hintLabel="Entre 4 y 40 carácteres" appearance="outline">
+              <mat-label>Contraseña</mat-label>
+              <input matInput [type]="ocultarPasword ? 'password' : 'text'" #passwordForm formControlName="password" minlength="4" maxlength="40">
+              <button mat-icon-button matSuffix type="button" (click)="ocultarPasword = !ocultarPasword">
+                <mat-icon>{{ocultarPasword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-hint align="end">{{(passwordForm.value != null && passwordForm.value.length) || 0}}/40</mat-hint>
+              <mat-error *ngIf="mostrarValidacion('password', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button type="submit" [disabled]="!form.valid" color="accent">{{ac.ACC_INICIAR_SESION}}</button>
+      </mat-card-actions>
+      <mat-card-header>
+        <mat-card-subtitle>
+          <mat-label>¿Has olvidado tu contraseña?</mat-label>
+          <mat-label class="enlace">{{ac.ACC_RECUPERAR_PASSWORD}}</mat-label>
+        </mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
+  </div>
+</form>

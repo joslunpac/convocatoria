@@ -1,0 +1,248 @@
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div mat-dialog-title>{{tituloPagina}}</div>
+  <mat-chip-listbox *ngIf="!this.modoCrear && !this.modoDuplicar">
+    <mat-chip
+      [color]="
+        (evento.eventoPadre !== null && evento.eventoPadre?.duplicado === 'S') ||
+        (evento.eventoPadre === null && evento.duplicado === 'S') ? 'duplicar' : 'primary'"
+        *ngIf="mostrarChipDuplicar()">
+      <mat-label>{{comprobarSiEventoDuplicado()}}</mat-label>
+    </mat-chip>
+    <mat-chip
+      [class.parpadeo-lento]="evento.estado === ac.G_EST_DIRECTO"
+      [color]="
+        evento.estado === ac.L_SUSPENDIDO ||
+        evento.estado === ac.L_APLAZADO ||
+        evento.estado === ac.L_FINALIZADO ||
+        evento.estado === ac.G_EST_DIRECTO ? (evento.estado | lowercase) : 'planificado'">
+      <mat-label>{{evento.estado}}</mat-label>
+    </mat-chip>
+  </mat-chip-listbox>
+
+  <mat-dialog-content id="detalle-campos">
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab label="Datos generales">
+        <mat-form-field appearance="fill">
+          <mat-label>{{ac.TIPO_ACTO_CULTO}}</mat-label>
+          <mat-select #tipoActoCultoForm formControlName="tipoActoCulto" (selectionChange)="seleccionarTipoActoCulto(tipoActoCultoForm.value)">
+            <mat-option>...</mat-option>
+            <mat-option [value]="tipoActoCulto.id" *ngFor="let tipoActoCulto of tiposActoCultoFiltro">
+              {{tipoActoCulto.nombreSingular}}{{tipoActoCulto.dias == 0 ? ' / Variable' : ''}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="mostrarValidacion('tipoActoCulto', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+        </mat-form-field>
+        <mat-form-field hintLabel="Diferenciación del tipo de acto o culto" appearance="fill">
+          <mat-label>Tipo</mat-label>
+          <input matInput type="text" #tipoForm formControlName="tipo" maxlength="500" [matAutocomplete]="autoTipo">
+          <mat-hint align="end" *ngIf="!this.modoVer">{{(tipoForm.value != null && tipoForm.value.length) || 0}}/500</mat-hint>
+          <mat-autocomplete #autoTipo="matAutocomplete">
+            <mat-option [value]="tipo" *ngFor="let tipo of tipos">
+              {{tipo}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field [hintLabel]="!this.modoVer ? 'Min: 1' : ''" appearance="fill">
+          <mat-label>Edición</mat-label>
+          <input matInput type="number" formControlName="edicion" min="1">
+        </mat-form-field>
+        <mat-form-field [hintLabel]="!this.modoVer ? 'Min: 1' : ''" appearance="fill">
+          <mat-label>Aniversario</mat-label>
+          <input matInput type="number" formControlName="aniversario" min="1">
+        </mat-form-field>
+        <mat-form-field [hintLabel]="!this.modoVer ? 'Min: 0 días' : ''" appearance="fill"
+          *ngIf="!this.modoCrear && !this.modoDuplicar">
+          <mat-label>Día</mat-label>
+          <input matInput type="number" formControlName="dia" min="0">
+        </mat-form-field>
+        <mat-form-field [hintLabel]="!this.modoVer ? 'Número de días de duración. Min: 1 día' : ''" appearance="fill"
+          *ngIf="this.modoCrear || this.modoDuplicar">
+          <mat-label>Duración</mat-label>
+          <input matInput type="number" formControlName="duracion" min="1">
+          <span matSuffix>Días</span>
+          <mat-error *ngIf="mostrarValidacion('duracion', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ac.ENTIDAD}} organizadora</mat-label>
+          <mat-select #entidadOrganizadoraForm formControlName="entidadOrganizadora" (selectionChange)="seleccionarEntidadOrganizadora(entidadOrganizadoraForm.value)">
+            <mat-option>...</mat-option>
+            <mat-option [value]="entidad.id" *ngFor="let entidad of entidadesFiltro">
+              {{entidad | nombreEntidadCompleto}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="mostrarValidacion('entidadOrganizadora', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+        </mat-form-field>
+        <mat-form-field [hintLabel]="!this.modoVer ? 'Si no se selecciona uno, usa el del primer titular. Si no hay titulares, usa el principal de la entidad organizadora en caso de tener carácter' : ''" appearance="fill">
+          <mat-label>{{ac.CARACTER}}</mat-label>
+          <mat-select formControlName="caracter" [disabled]="entidadOrganizadoraForm.value == undefined">
+            <mat-option>...</mat-option>
+            <mat-option [value]="caracter.id" *ngFor="let caracter of caracteres">
+              {{caracter.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Fecha del evento</mat-label>
+          <input matInput [matDatepicker]="pickerFecha" formControlName="fecha">
+          <mat-datepicker-toggle matSuffix [for]="pickerFecha"></mat-datepicker-toggle>
+          <mat-datepicker #pickerFecha></mat-datepicker>
+          <mat-error *ngIf="mostrarValidacion('fecha', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Inicio 1er tramo horario</mat-label>
+          <input matInput type="time" formControlName="horaIni1">
+          <mat-error *ngIf="mostrarValidacion('horaIni1', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Fin 1er tramo horario</mat-label>
+          <input matInput type="time" formControlName="horaFin1">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Inicio 2º tramo horario</mat-label>
+          <input matInput type="time" formControlName="horaIni2">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Fin 2º tramo horario</mat-label>
+          <input matInput type="time" formControlName="horaFin2">
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ac.LUGAR}}</mat-label>
+          <mat-select #lugarForm formControlName="lugar">
+            <mat-option>...</mat-option>
+            <mat-option [value]="lugar.id" *ngFor="let lugar of lugaresFiltro">
+              {{lugar | nombreLugarCompletoPipe}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="mostrarValidacion('lugar', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+        </mat-form-field>
+      </mat-tab>
+      <mat-tab label="Participantes">
+        <mat-form-field appearance="fill">
+          <mat-label>{{ac.L_EN_HONOR_A}}</mat-label>
+          <mat-select #titularForm formControlName="titulares" multiple [disabled]="entidadOrganizadoraForm.value == undefined">
+            <mat-option>...</mat-option>
+            <mat-option [value]="titular.id" *ngFor="let titular of titularesFiltro">
+              {{mostrarNombreTitularConEntidad ? (titular | nombreTitularConEntidad) : titular.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ac.PERSONAS}}</mat-label>
+          <mat-select #personaForm formControlName="personas" multiple>
+            <mat-option>...</mat-option>
+            <mat-option [value]="persona.id" *ngFor="let persona of personasFiltro">
+              {{persona | nombrePersonaConProfesion}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ac.L_MUSICA}}</mat-label>
+          <mat-select #bandaForm formControlName="bandas" multiple>
+            <mat-option>...</mat-option>
+            <mat-option [value]="banda.id" *ngFor="let banda of bandasFiltro">
+              {{banda | nombreEntidadCompleto}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-tab>
+      <mat-tab label="Otros datos">
+        <mat-form-field hintLabel="Marco que engloba el tipo de acto o culto" appearance="fill">
+          <mat-label>Marco</mat-label>
+          <input matInput type="text" #marcoForm formControlName="marco" maxlength="500" [matAutocomplete]="autoMarco">
+          <mat-hint align="end" *ngIf="!this.modoVer">{{(marcoForm.value != null && marcoForm.value.length) || 0}}/500</mat-hint>
+          <mat-autocomplete #autoMarco="matAutocomplete">
+            <mat-option [value]="marco" *ngFor="let marco of marcos">
+              {{marco}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field hintLabel="Título de la sesión dentro del marco" appearance="fill">
+          <mat-label>Título</mat-label>
+          <input matInput #tituloForm formControlName="titulo" maxlength="500">
+          <mat-hint align="end" *ngIf="!this.modoVer">{{(tituloForm.value != null && tituloForm.value.length) || 0}}/500</mat-hint>
+        </mat-form-field>
+        <mat-form-field [hintLabel]="!this.modoVer ? 'Min: 1' : ''" appearance="fill">
+          <mat-label>Edición</mat-label>
+          <input matInput type="number" formControlName="tituloEdicion" min="1">
+        </mat-form-field>
+        <mat-form-field hintLabel="Hito que engloba el tipo de acto o culto" appearance="fill">
+          <mat-label>Hito</mat-label>
+          <input matInput type="text" #hitoForm formControlName="hito" maxlength="500" [matAutocomplete]="autoHito">
+          <mat-hint align="end" *ngIf="!this.modoVer">{{(hitoForm.value != null && hitoForm.value.length) || 0}}/500</mat-hint>
+          <mat-autocomplete #autoHito="matAutocomplete">
+            <mat-option [value]="hito" *ngFor="let hito of hitos">
+              {{hito}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field [hintLabel]="!this.modoVer ? 'Min: 1' : ''" appearance="fill">
+          <mat-label>Aniversario hito</mat-label>
+          <input matInput type="number" formControlName="hitoAniversario" min="1">
+        </mat-form-field>
+        <mat-form-field hintLabel="Información adicional del evento" appearance="fill">
+          <mat-label>Información</mat-label>
+          <textarea matInput type="text" #infoForm formControlName="informacion" [rows]="3" maxlength="5000" [matAutocomplete]="autoInformacion"></textarea>
+          <mat-hint align="end" *ngIf="!this.modoVer">{{(infoForm.value != null && infoForm.value.length) || 0}}/5000</mat-hint>
+          <mat-autocomplete #autoInformacion="matAutocomplete">
+            <mat-option [value]="informacion" *ngFor="let informacion of informaciones">
+              {{informacion}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Itinerario</mat-label>
+          <textarea matInput #itinerarioForm formControlName="itinerario" [rows]="3" maxlength="5000"></textarea>
+          <mat-hint align="end" *ngIf="!this.modoVer">{{(itinerarioForm.value != null && itinerarioForm.value.length) || 0}}/5000</mat-hint>
+        </mat-form-field>
+        <mat-form-field hintLabel="Apuntes a considerar sobre el evento" appearance="fill">
+          <mat-label>Nota</mat-label>
+          <textarea matInput #notaForm formControlName="nota" [rows]="3" maxlength="1000"></textarea>
+          <mat-hint align="end" *ngIf="!this.modoVer">{{(notaForm.value != null && notaForm.value.length) || 0}}/1000</mat-hint>
+        </mat-form-field>
+      </mat-tab>
+      <mat-tab label="Gestión">
+        <h3>Características propias de éste evento:</h3>
+        <mat-checkbox color="visible" formControlName="visible">{{ac.L_VISIBLE}}</mat-checkbox>
+        <mat-checkbox color="aplazado" formControlName="aplazado">{{ac.L_APLAZADO}}</mat-checkbox>
+        <mat-checkbox color="suspendido" formControlName="suspendido">{{ac.L_SUSPENDIDO}}</mat-checkbox>
+        <mat-checkbox color="extraordinario" formControlName="extraordinario">{{ac.L_EXTRAORDINARIO}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="pendienteRevisar">{{ac.L_PENDIENTE_REVISAR}}</mat-checkbox>
+        <mat-form-field hintLabel="Apuntes a considerar sobre la revisión del evento" appearance="fill">
+          <mat-label>Nota revisión</mat-label>
+          <textarea matInput #revisarNotaForm formControlName="revisarNota" [rows]="3" maxlength="1000"></textarea>
+          <mat-hint align="end" *ngIf="!this.modoVer">{{(revisarNotaForm.value != null && revisarNotaForm.value.length) || 0}}/1000</mat-hint>
+        </mat-form-field>
+        <mat-divider></mat-divider>
+        <h3>Características fijas a tener en cuenta para futuros eventos:</h3>
+        <mat-form-field [hintLabel]="modoCrear || evento.eventoPadre == null
+          ? 'Norma que indica cuándo se tiene que celebrar el evento cada año'
+          : 'Norma que indica cuándo se tiene que celebrar el evento cada año. Esta norma pertenece al evento padre'" appearance="fill">
+          <mat-label>Regla</mat-label>
+          <input matInput type="text" #reglaForm formControlName="regla" maxlength="1000" [matAutocomplete]="autoRegla">
+          <mat-hint align="end" *ngIf="!this.modoVer">{{(reglaForm.value != null && reglaForm.value.length) || 0}}/1000</mat-hint>
+          <mat-autocomplete #autoRegla="matAutocomplete">
+            <mat-option [value]="regla" *ngFor="let regla of reglas">
+              {{regla}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-checkbox formControlName="periodico">{{ac.L_PERIODICO}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="revisarTipoActoCulto">{{ac.L_REVISAR_TIPO_ACTO_CULTO}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="revisarDias">{{ac.L_REVISAR_DIAS}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="revisarLugar">{{ac.L_REVISAR_LUGAR}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="revisarTitulares">{{ac.L_REVISAR_TITULARES}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="revisarPersonas">{{ac.L_REVISAR_PERSONAS}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="revisarBandas">{{ac.L_REVISAR_BANDAS}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="revisarInformacion">{{ac.L_REVISAR_INFORMACION}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="revisarItinerario">{{ac.L_REVISAR_ITINERARIO}}</mat-checkbox>
+        <mat-checkbox color="revisar" formControlName="revisarRegla">{{ac.L_REVISAR_REGLA}}</mat-checkbox>
+        <div></div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-dialog-close mat-flat-button type="button" cdkFocusInitial>{{ac.L_CANCELAR}}</button>
+    <button mat-flat-button type="submit" [disabled]="!form.valid" color="accent" *ngIf="!modoVer">{{ac.L_GUARDAR}}</button>
+  </mat-dialog-actions>
+</form>

@@ -1,0 +1,89 @@
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div mat-dialog-title>{{tituloPagina}}</div>
+
+  <mat-dialog-content id="detalle-campos">
+      <img class="avatar-3x" [src]="ac.RUTA_ENTIDADES + codigoForm.value + '.jpg'">
+      <mat-form-field [hintLabel]="!this.modoVer ? 'Max: 50 carácteres' : ''" appearance="fill">
+        <mat-label>Código</mat-label>
+        <input matInput #codigoForm formControlName="codigo" maxlength="50">
+        <mat-hint align="end" *ngIf="!this.modoVer">{{(codigoForm.value != null && codigoForm.value.length) || 0}}/50</mat-hint>
+        <mat-error *ngIf="mostrarValidacion('codigo', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+      </mat-form-field>
+      <mat-form-field [hintLabel]="!this.modoVer ? 'Max: 50 carácteres' : ''" appearance="fill">
+        <mat-label>Nombre corto</mat-label>
+        <input matInput #nombreCortoForm formControlName="nombreCorto" maxlength="50">
+        <mat-hint align="end" *ngIf="!this.modoVer">{{(nombreCortoForm.value != null && nombreCortoForm.value.length) || 0}}/50</mat-hint>
+        <mat-error *ngIf="mostrarValidacion('nombreCorto', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+      </mat-form-field>
+      <mat-form-field [hintLabel]="!this.modoVer ? 'Max: 50 carácteres' : ''" appearance="fill">
+        <mat-label>Nombre corto aux</mat-label>
+        <input matInput #nombreCortoAuxForm formControlName="nombreCortoAux" maxlength="50">
+        <mat-hint align="end" *ngIf="!this.modoVer">{{(nombreCortoAuxForm.value != null && nombreCortoAuxForm.value.length) || 0}}/50</mat-hint>
+      </mat-form-field>
+      <mat-form-field [hintLabel]="!this.modoVer ? 'Max: 500 carácteres' : ''" appearance="fill">
+        <mat-label>Nombre completo</mat-label>
+        <textarea matInput #nombreForm formControlName="nombre" [rows]="3" maxlength="500"></textarea>
+        <mat-hint align="end" *ngIf="!this.modoVer">{{(nombreForm.value != null && nombreForm.value.length) || 0}}/500</mat-hint>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ac.TIPO_ENTIDAD}}</mat-label>
+        <mat-select #tipoEntidadForm formControlName="tipoEntidad">
+          <mat-option>...</mat-option>
+          <mat-option [value]="tipoEntidad.id" *ngFor="let tipoEntidad of tiposEntidad">
+            {{tipoEntidad.nombreSingular}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="mostrarValidacion('tipoEntidad', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="tipoEntidadForm.value != undefined && tipoEntidadForm.value != 5">
+        <mat-label>{{ac.CARACTER}} principal</mat-label>
+        <mat-select formControlName="caracterPrincipal">
+          <mat-option>...</mat-option>
+          <mat-option [value]="caracter.id" *ngFor="let caracter of caracteres">
+            {{caracter.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="tipoEntidadForm.value != undefined && tipoEntidadForm.value != 5">
+        <mat-label>{{ac.CARACTERES}}</mat-label>
+        <mat-select formControlName="caracteres" multiple>
+          <mat-option [value]="caracter.id" *ngFor="let caracter of caracteres">
+            {{caracter.nombre}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" *ngIf="tipoEntidadForm.value != undefined && tipoEntidadForm.value == 5">
+        <mat-label>{{ac.TIPO_BANDA}}</mat-label>
+        <mat-select #tipoBandaForm formControlName="tipoBanda">
+          <mat-option>...</mat-option>
+          <mat-option [value]="tipoBanda.id" *ngFor="let tipoBanda of tiposBandaFiltro">
+            {{tipoBanda.nombreSingular}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>{{ac.LUGAR}}</mat-label>
+        <mat-select #lugarForm formControlName="lugar">
+          <mat-option>...</mat-option>
+          <mat-option [value]="lugar.id" *ngFor="let lugar of lugaresFiltro">
+            {{lugar | nombreLugarCompletoPipe}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-divider></mat-divider>
+      <mat-form-field [hintLabel]="!this.modoVer ? 'Max: 1000 carácteres' : ''" appearance="fill">
+        <mat-label>Nota</mat-label>
+        <textarea matInput #notaForm formControlName="nota" [rows]="3" maxlength="1000"></textarea>
+        <mat-hint align="end" *ngIf="!this.modoVer">{{(notaForm.value != null && notaForm.value.length) || 0}}/1000</mat-hint>
+      </mat-form-field>
+      <mat-checkbox formControlName="tieneAvatar">{{ac.L_TIENE_AVATAR}}</mat-checkbox>
+      <mat-checkbox color="visible" formControlName="visible">{{ac.L_VISIBLE}}</mat-checkbox>
+      <mat-checkbox color="revisar" formControlName="pendienteRevisar">{{ac.L_PENDIENTE_REVISAR}}</mat-checkbox>
+      <div></div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-dialog-close mat-flat-button type="button" cdkFocusInitial>{{ac.L_CANCELAR}}</button>
+    <button mat-flat-button type="submit" [disabled]="!form.valid" color="accent" *ngIf="!modoVer">{{ac.L_GUARDAR}}</button>
+  </mat-dialog-actions>
+</form>

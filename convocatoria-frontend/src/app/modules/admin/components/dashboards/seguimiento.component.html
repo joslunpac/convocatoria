@@ -1,0 +1,105 @@
+<div id="contenedor">
+  <!--Seguimiento de eventos-->
+  <div id="cabecera">
+    <div class="titulo">
+      <mat-label>Seguimiento de eventos</mat-label>
+      <mat-label class="hide-lt-sm">Información relevante y actuaciones a realizar sobre los eventos.</mat-label>
+    </div>
+    <div class="acciones">
+      <button mat-mini-fab class="mat-elevation-z2" color="back-crear" matTooltip="{{ac.L_CREAR + ' ' + ac.EVENTO}}" (click)="irADetalle(entidadEvento)" *ngIf="esAdministrador">
+        <mat-icon>{{ac.I_CREAR}}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="row flex-auto-childs">
+      <!--Totales de eventos-->
+      <mat-card>
+        <mat-icon color="primary">{{ac.I_SIEMPRE}}</mat-icon>
+        <mat-card-header>
+          <mat-card-title>{{ac.G_OTR_TOTALES}}</mat-card-title>
+          <mat-card-subtitle>Todos los eventos registrados en el sistema.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row justify-between">
+            <app-acceso-directo [accesoDirecto]="eventosTOTTotal"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosTOTFinalizados"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosTOTPlanificados"></app-acceso-directo>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!--Eventos de hoy-->
+      <mat-card>
+        <mat-icon color="hoy">{{ac.I_HOY}}</mat-icon>
+        <mat-card-header>
+          <mat-card-title>{{ac.TIEMPO_HOY}}</mat-card-title>
+          <mat-card-subtitle>¿Que ocurre {{ac.TIEMPO_HOY | lowercase}}?</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row justify-between">
+            <app-acceso-directo [accesoDirecto]="eventosHOYTotal"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosHOYDirecto"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosHOYNoVisibles"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosHOYPendientesRevisar"></app-acceso-directo>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!--Eventos de mañana-->
+      <mat-card>
+        <mat-icon color="manana">{{ac.I_HOY}}</mat-icon>
+        <mat-card-header>
+          <mat-card-title>{{ac.TIEMPO_MANIANA}}</mat-card-title>
+          <mat-card-subtitle>¿Que ocurre {{ac.TIEMPO_MANIANA | lowercase}}?</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row justify-between">
+            <app-acceso-directo [accesoDirecto]="eventosMANTotal"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosMANNoVisibles"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosMANPendientesRevisar"></app-acceso-directo>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="row flex-auto-childs">
+      <!--Eventos pendientes de revisar-->
+      <mat-card>
+        <mat-icon color="revisar">{{ac.I_PENDIENTE_REVISAR}}</mat-icon>
+        <mat-card-header>
+          <mat-card-title>{{ac.L_PENDIENTES_REVISAR}}</mat-card-title>
+          <mat-card-subtitle>Eventos que requieren de una revisión de su información.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row justify-between">
+            <app-acceso-directo [accesoDirecto]="eventosPRTotal"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosPRCriticos"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosPRGraves"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosPRModerados"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosPRLeves"></app-acceso-directo>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!--Eventos pendientes de duplicar-->
+      <mat-card>
+        <mat-icon color="duplicar">{{ac.I_DUPLICAR}}</mat-icon>
+        <mat-card-header>
+          <mat-card-title>{{ac.L_PENDIENTES_DUPLICAR}}</mat-card-title>
+          <mat-card-subtitle>Eventos padres finalizados que pueden ser duplicados para el año próximo.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="row justify-between">
+            <app-acceso-directo [accesoDirecto]="eventosPDTotal"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosPDCriticos"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosPDGraves"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosPDModerados"></app-acceso-directo>
+            <app-acceso-directo [accesoDirecto]="eventosPDLeves"></app-acceso-directo>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

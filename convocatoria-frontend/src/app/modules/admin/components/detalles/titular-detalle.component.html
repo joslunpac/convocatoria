@@ -1,0 +1,51 @@
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div mat-dialog-title>{{tituloPagina}}</div>
+
+  <mat-dialog-content id="detalle-campos">
+    <img class="avatar-3x" [src]="ac.RUTA_TITULARES + codigoEntidadSeleccionada + '_' + ordenForm.value + '.jpg'">
+    <mat-form-field [hintLabel]="!this.modoVer ? 'Max: 100 carácteres' : ''" appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput #nombreForm formControlName="nombre" maxlength="100">
+      <mat-hint align="end" *ngIf="!this.modoVer">{{(nombreForm.value != null && nombreForm.value.length) || 0}}/100</mat-hint>
+      <mat-error *ngIf="mostrarValidacion('nombre', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+    <mat-radio-group formControlName="categoria">
+      <mat-label>Categoría:</mat-label>
+      <mat-radio-button [value]="categoria.valor" *ngFor="let categoria of categorias">
+        {{categoria.descripcion}}
+      </mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field [hintLabel]="!this.modoVer ? 'Min: 1' : ''" appearance="fill">
+      <mat-label>Orden</mat-label>
+      <input matInput #ordenForm type="number" formControlName="orden" min="1">
+      <mat-error *ngIf="mostrarValidacion('orden', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{ac.ENTIDAD}}</mat-label>
+      <mat-select #entidadForm formControlName="entidad" (selectionChange)="seleccionarEntidad(entidadForm.value)">
+        <mat-option>...</mat-option>
+        <mat-option [value]="entidad.id" *ngFor="let entidad of entidadesFiltro">
+          {{entidad | nombreEntidadCompleto}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="mostrarValidacion('entidad', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{ac.CARACTER}}</mat-label>
+      <mat-select formControlName="caracter">
+        <mat-option>...</mat-option>
+        <mat-option [value]="caracter.id" *ngFor="let caracter of caracteres">
+          {{caracter.nombre}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <mat-checkbox formControlName="tieneAvatar">{{ac.L_TIENE_AVATAR}}</mat-checkbox>
+    <div></div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-dialog-close mat-flat-button type="button" cdkFocusInitial>{{ac.L_CANCELAR}}</button>
+    <button mat-flat-button type="submit" [disabled]="!form.valid" color="accent" *ngIf="!modoVer">{{ac.L_GUARDAR}}</button>
+  </mat-dialog-actions>
+</form>

@@ -1,0 +1,114 @@
+<div class="sidenav-contenedor {{temaService.comprobarSiTemaOscuro()}}">
+  <mat-toolbar>
+    <button mat-icon-button class="hide-gt-xs" (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <span class="espaciador hide-gt-xs"></span>
+
+    <!--Logo de la aplicación-->
+    <img class="avatar-1x hide-lt-sm" [src]="ac.RUTA_IMAGENES + 'logo.png'" routerLink="{{ac.HOME_ROUTE}}">
+
+    <!--Nombre de la aplicación-->
+    <mat-label>{{ac.APP_NOMBRE}}</mat-label>
+
+    <span class="espaciador"></span>
+
+    <!--Menú común-->
+    <span class="hide-lt-sm" *ngIf="menuComun.visible">
+      <span *ngFor="let item of menuComun.menus">
+        <button mat-button routerLink="{{item.ruta}}" routerLinkActive="item-menu-active" *ngIf="item.visible">
+          <mat-icon *ngIf="item.icono">{{item.icono}}</mat-icon>
+          <mat-label *ngIf="item.nombre">{{item.nombre}}</mat-label>
+        </button>
+      </span>
+    </span>
+
+    <!--Menú de administración-->
+    <span class="hide-lt-sm" *ngIf="menuAdmin.visible">
+      <button mat-button [matMenuTriggerFor]="subMenuAdmin">
+        <mat-label *ngIf="menuAdmin.nombre">{{menuAdmin.nombre}}</mat-label>
+        <mat-icon iconPositionEnd class="ml-1">arrow_drop_down</mat-icon>
+      </button>
+      <mat-menu #subMenuAdmin="matMenu">
+        <span *ngFor="let item of menuAdmin.menus">
+          <button mat-menu-item routerLink="{{item.ruta}}" routerLinkActive="item-menu-active" *ngIf="item.visible">
+            <mat-icon *ngIf="item.icono">{{item.icono}}</mat-icon>
+            <mat-label *ngIf="item.nombre">{{item.nombre}}</mat-label>
+          </button>
+        </span>
+      </mat-menu>
+    </span>
+
+    <!--Cuenta de usuario-->
+    <span *ngIf="!estaLogado">
+      <button mat-button class="hide-lt-sm" routerLink="{{'/' + ac.SIGNIN_ROUTE}}">
+        <mat-icon>{{ac.SIGNIN_ICONO}}</mat-icon>
+        {{ac.SIGNIN}}
+      </button>
+      <button mat-icon-button class="hide-gt-xs" routerLink="{{'/' + ac.SIGNIN_ROUTE}}">
+        <mat-icon>{{ac.SIGNIN_ICONO}}</mat-icon>
+      </button>
+    </span>
+
+    <!--Menú de usuario-->
+    <button mat-button [matMenuTriggerFor]="subMenuUsuario" *ngIf="estaLogado">
+      <img class="avatar-0x" [src]="tokenService.obtenerAvatarUsuario() | rutaAvatarUsuario">
+      <mat-label class="hide-lt-sm">{{tokenService.obtenerNombreUsuario()}}</mat-label>
+    </button>
+    <mat-menu #subMenuUsuario="matMenu">
+      <button mat-menu-item routerLink="{{'/' + ac.PERFIL_ROUTE}}">
+        <mat-icon>{{ac.PERFIL_ICONO}}</mat-icon>
+        <mat-label>{{ac.PERFIL}}</mat-label>
+      </button>
+      <button mat-menu-item routerLink="{{'/' + ac.SUSCRIPCIONES_ROUTE}}">
+        <mat-icon>{{ac.SUSCRIPCIONES_ICONO}}</mat-icon>
+        <mat-label>{{ac.SUSCRIPCIONES}}</mat-label>
+      </button>
+      <button mat-menu-item routerLink="{{'/' + ac.CONFIGURACION_ROUTE}}">
+        <mat-icon>{{ac.CONFIGURACION_ICONO}}</mat-icon>
+        <mat-label>{{ac.CONFIGURACION}}</mat-label>
+      </button>
+      <button mat-menu-item (click)="authService.signout()">
+        <mat-icon>{{ac.SIGNUP_ICONO}}</mat-icon>
+        <mat-label>{{ac.SIGNUP}}</mat-label>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="over">
+      <!--Menú común-->
+      <mat-nav-list *ngIf="menuComun.visible">
+        <div mat-subheader *ngIf="menuComun.nombre">{{menuComun.nombre}}</div>
+        <span *ngFor="let item of menuComun.menus">
+          <mat-list-item routerLink="{{item.ruta}}" routerLinkActive="item-menu-active" (click)="sidenav.toggle()" *ngIf="item.visible">
+            <mat-icon matListItemIcon *ngIf="item.icono">{{item.icono}}</mat-icon>
+            <span matListItemTitle>{{item.nombre}}</span>
+            <span matListItemLine *ngIf="item.descripcion">{{item.descripcion | titlecase}}</span>
+          </mat-list-item>
+          <mat-divider *ngIf="item.visible && item.separador"></mat-divider>
+        </span>
+        <mat-divider *ngIf="menuComun.separador"></mat-divider>
+      </mat-nav-list>
+
+      <!--Menú de administración-->
+      <mat-nav-list *ngIf="menuAdmin.visible">
+        <div mat-subheader *ngIf="menuAdmin.nombre">{{menuAdmin.nombre}}</div>
+        <span *ngFor="let item of menuAdmin.menus">
+          <mat-list-item routerLink="{{item.ruta}}" routerLinkActive="item-menu-active" (click)="sidenav.toggle()" *ngIf="item.visible" >
+            <mat-icon matListItemIcon *ngIf="item.icono">{{item.icono}}</mat-icon>
+            <span matListItemTitle>{{item.nombre}}</span>
+            <span matListItemLine *ngIf="item.descripcion">{{item.descripcion | titlecase}}</span>
+          </mat-list-item>
+          <mat-divider *ngIf="item.visible && item.separador"></mat-divider>
+        </span>
+        <mat-divider *ngIf="menuAdmin.separador"></mat-divider>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

@@ -1,0 +1,52 @@
+<form [formGroup]="form" (ngSubmit)="guardar()">
+  <div mat-dialog-title>{{tituloPagina}}</div>
+
+  <mat-dialog-content id="detalle-campos">
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input type="email" matInput #emailForm formControlName="email" autocomplete="new-email">
+      <mat-error *ngIf="mostrarValidacion('email', 'email') && !mostrarValidacion('email', 'required')">{{ac.G_VAL_EMAIL_INVALIDO}}</mat-error>
+      <mat-error *ngIf="mostrarValidacion('email', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+    <mat-form-field hintLabel="Max: 100 carácteres" appearance="fill">
+      <mat-label>Nombre</mat-label>
+      <input matInput #nombreForm formControlName="nombre" maxlength="100">
+      <mat-hint align="end">{{(nombreForm.value != null && nombreForm.value.length) || 0}}/100</mat-hint>
+      <mat-error *ngIf="mostrarValidacion('nombre', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+    <mat-form-field hintLabel="Max: 500 carácteres" appearance="fill">
+      <mat-label>Apellidos</mat-label>
+      <input matInput #apellidosForm formControlName="apellidos" maxlength="500">
+      <mat-hint align="end">{{(apellidosForm.value != null && apellidosForm.value.length) || 0}}/500</mat-hint>
+      <mat-error *ngIf="mostrarValidacion('apellidos', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+    <mat-form-field hintLabel="Entre 4 y 40 carácteres" appearance="fill" *ngIf="modoCrear">
+      <mat-label>{{modoCrear ? 'Contraseña' : 'Nueva contraseña'}}</mat-label>
+      <input matInput [type]="ocultarPasword ? 'password' : 'text'" #passwordForm formControlName="password" minlength="4" maxlength="40" autocomplete="new-password">
+      <button mat-icon-button matSuffix type="button" (click)="ocultarPasword = !ocultarPasword">
+        <mat-icon>{{ocultarPasword ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+      <mat-hint align="end">{{(passwordForm.value != null && passwordForm.value.length) || 0}}/40</mat-hint>
+      <mat-error *ngIf="mostrarValidacion('password', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" *ngIf="modoCrear">
+      <mat-label>{{modoCrear ? 'Confirmar contraseña' : 'Confirmar nueva contraseña'}}</mat-label>
+      <input matInput type="password" formControlName="confirmarPassword" [errorStateMatcher]="matcher" minlength="4" maxlength="40" autocomplete="new-password">
+      <mat-error *ngIf="form.hasError('passwordsDiferentes')">{{ac.G_VAL_PASSWORD_DIFERENTE}}</mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>{{ac.ROLES}}</mat-label>
+      <mat-select formControlName="roles" multiple>
+        <mat-option [value]="rol.id" *ngFor="let rol of roles">
+          {{rol.nombre | eliminarPrefijo:'ROLE_'}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="mostrarValidacion('roles', 'required')">{{ac.G_VAL_CAMPO_OBLIGATORIO}}</mat-error>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-dialog-close mat-flat-button type="button" cdkFocusInitial>{{ac.L_CANCELAR}}</button>
+    <button mat-flat-button type="submit" [disabled]="!form.valid" color="accent">{{ac.L_GUARDAR}}</button>
+  </mat-dialog-actions>
+</form>

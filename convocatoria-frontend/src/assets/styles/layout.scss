@@ -1,0 +1,139 @@
+// xs
+@media screen and (max-width: 599px) {
+  .hide-xs { display: none !important; }
+  .row-xs { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-xs { display: flex; flex-direction: column !important; }
+  .align-center-xs { display: flex; align-items: center; }
+  .separador-vertical-xs { margin-top: 1.5rem; }
+}
+// sm
+@media screen and (min-width: 600px) and (max-width: 959px) {
+  .hide-sm { display: none !important; }
+  .row-sm { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-sm { display: flex; flex-direction: column !important; }
+  .align-center-sm { display: flex; align-items: center; }
+  .separador-vertical-sm { margin-top: 1.5rem; }
+}
+// md
+@media screen and (min-width: 960px) and (max-width: 1279px) {
+  .hide-md { display: none !important; }
+  .row-md { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-md { display: flex; flex-direction: column !important; }
+  .align-center-md { display: flex; align-items: center; }
+  .separador-vertical-md { margin-top: 1.5rem; }
+}
+// lg
+@media screen and (min-width: 1280px) and (max-width: 1919px) {
+  .hide-lg { display: none !important; }
+  .row-lg { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-lg { display: flex; flex-direction: column !important; }
+  .align-center-lg { display: flex; align-items: center; }
+  .separador-vertical-lg { margin-top: 1.5rem; }
+}
+// xl
+@media screen and (min-width: 1920px) and (max-width: 4999px) {
+  .hide-xl { display: none !important; }
+  .row-xl { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-xl { display: flex; flex-direction: column !important; }
+  .align-center-xl { display: flex; align-items: center; }
+  .separador-vertical-xl { margin-top: 1.5rem; }
+}
+// lt-sm
+@media screen and (max-width: 599px) {
+  .hide-lt-sm { display: none !important; }
+  .row-lt-sm { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-lt-sm  { display: flex; flex-direction: column !important; }
+  .align-center-lt-sm { display: flex; align-items: center; }
+  .separador-vertical-lt-sm { margin-top: 1.5rem; }
+}
+// lt-md
+@media screen and (max-width: 959px) {
+  .hide-lt-md { display: none !important; }
+  .row-lt-md { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-lt-md { display: flex; flex-direction: column !important; }
+  .align-center-lt-md { display: flex; align-items: center; }
+  .separador-vertical-lt-md { margin-top: 1.5rem; }
+}
+// lt-lg
+@media screen and (max-width: 1279px) {
+  .hide-lt-lg { display: none !important; }
+  .row-lt-lg { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-lt-lg { display: flex; flex-direction: column !important; }
+  .align-center-lt-lg { display: flex; align-items: center; }
+  .separador-vertical-lt-lg { margin-top: 1.5rem; }
+}
+// lt-xl
+@media screen and (max-width: 1919px) {
+  .hide-lt-xl { display: none !important; }
+  .row-lt-xl { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-lt-xl { display: flex; flex-direction: column !important; }
+  .align-center-lt-xl { display: flex; align-items: center; }
+  .separador-vertical-lt-xl { margin-top: 1.5rem; }
+}
+// gt-xs
+@media screen and (min-width: 600px) {
+  .hide-gt-xs { display: none !important; }
+  .row-gt-xs { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-gt-xs { display: flex; flex-direction: column !important; }
+  .align-center-gt-xs { display: flex; align-items: center; }
+  .separador-vertical-gt-xs { margin-top: 1.5rem; }
+}
+// gt-sm
+@media screen and (min-width: 960px) {
+  .hide-gt-sm { display: none !important; }
+  .row-gt-sm { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-gt-sm { display: flex; flex-direction: column !important; }
+  .align-center-gt-sm { display: flex; align-items: center; }
+  .separador-vertical-gt-sm { margin-top: 1.5rem; }
+}
+// gt-md
+@media screen and (min-width: 1280px) {
+  .hide-gt-md { display: none !important; }
+  .row-gt-md { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-gt-md { display: flex; flex-direction: column !important; }
+  .align-center-gt-md { display: flex; align-items: center; }
+  .separador-vertical-gt-md { margin-top: 1.5rem; }
+}
+// gt-lg
+@media screen and (min-width: 1920px) {
+  .hide-gt-lg { display: none !important; }
+  .row-gt-lg { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-gt-lg { display: flex; flex-direction: column !important; }
+  .align-center-gt-lg { display: flex; align-items: center; }
+  .separador-vertical-gt-lg { margin-top: 1.5rem; }
+}
+// gt-xl
+@media screen and (min-width: 5000px) {
+  .hide-gt-xl { display: none !important; }
+  .row-gt-xl { display: flex; flex-direction: row !important; flex-wrap: wrap; }
+  .column-gt-xl { display: flex; flex-direction: column !important; }
+  .align-center-gt-xl { display: flex; align-items: center; }
+  .separador-vertical-gt-xl { margin-top: 1.5rem; }
+}
+// General
+.row { display: flex; flex-direction: row; flex-wrap: wrap; gap: 1rem; }
+.column { display: flex; flex-direction: column; gap: 1rem; }
+.separador-vertical { margin-top: 1.5rem; }
+// Justificación
+.justify-start { display: flex; justify-content: flex-start; }
+.justify-end { display: flex; justify-content: flex-end; }
+.justify-center { display: flex; justify-content: center; }
+.justify-between { display: flex; justify-content: space-between; }
+.justify-around { display: flex; justify-content: space-around; }
+// Alineación
+.align-start { display: flex; align-items: flex-start; }
+.align-end { display: flex; align-items: flex-end; }
+.align-center { display: flex; align-items: center; }
+// Ocupación
+.espaciador { flex-grow: 1; }
+.flex-auto { flex: auto; }
+.flex-auto-childs > * { flex: auto; }
+.flex-1 { flex: 1; }
+.flex-1-childs > * { flex: 1; }
+// Delimitador
+.barra-vertical {
+  padding-right: 10px;
+  border-right: 2px solid;
+  border-color: rgb(224, 224, 224);
+  .tema-oscuro & { border-color: rgb(89, 89, 89); }
+}

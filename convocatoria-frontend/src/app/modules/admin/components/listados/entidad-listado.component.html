@@ -1,0 +1,144 @@
+<div id="contenedor">
+  <div id="cabecera">
+    <div class="titulo">
+      <mat-label>{{titulo}}</mat-label>
+      <mat-label class="hide-lt-sm">{{descripcion}}</mat-label>
+    </div>
+    <div class="acciones">
+      <button mat-icon-button matTooltip="{{ac.L_LIMPIAR_TODO}}" (click)="limpiarTodo()" *ngIf="mostrarLimpiarTodo()">
+        <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+      </button>
+      <button mat-mini-fab class="mat-elevation-z2" color="back-crear" matTooltip="{{ac.L_CREAR}}" (click)="irADetalle()" *ngIf="esAdministrador">
+        <mat-icon>{{ac.I_CREAR}}</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="column">
+    <div id="listado-filtros" class="row flex-auto-childs">
+      <mat-form-field appearance="outline">
+        <mat-icon matPrefix>{{ac.I_BUSCAR}}</mat-icon>
+        <mat-label>{{ac.L_FILTRO_BUSQUEDA}}</mat-label>
+        <input matInput (keyup)="cambiarFiltroBusqueda($event)" placeholder="{{ac.L_FILTRO_BUSQUEDA_PLACEHOLDER}}" #input>
+        <button matSuffix mat-icon-button matTooltip="{{ac.L_LIMPIAR}}" (click)="input.value = ''; cambiarFiltroBusqueda($event, true)" *ngIf="input.value">
+          <mat-icon>{{ac.I_LIMPIAR}}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <div id="listado-conmutadores" class="row justify-between">
+      <div class="row">
+        <mat-chip-listbox *ngFor="let tipoEntidad of tiposEntidad">
+          <mat-chip-option color="primary" matTooltip="{{tipoEntidad.nombreSingular}}" [selected]="contieneTipoEntidad(tipoEntidad.id)"
+            (click)="cambiarTipoEntidad(tipoEntidad.id)">
+            {{tipoEntidad.acronimo}}
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <mat-chip-listbox *ngFor="let caracter of caracteres">
+          <mat-chip-option [color]="caracter.acronimo | lowercase" matTooltip="{{caracter.nombre}}" [selected]="contieneCaracter(caracter.id)"
+            (click)="cambiarCaracter(caracter.id)">
+            {{caracter.acronimo}}
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+      <div class="row">
+        <mat-chip-listbox>
+          <mat-chip-option color="no-visible" matTooltip="{{ac.CRIT_NO_VISIBLES}}" [selected]="isCheckedNoVisibles"
+            (click)="cambiarConmutador(ac.CRIT_NO_VISIBLES)">
+            <mat-icon>{{ac.I_NO_VISIBLE}}</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+        <mat-chip-listbox>
+          <mat-chip-option color="revisar" matTooltip="{{ac.L_PENDIENTES_REVISAR}}" [selected]="isCheckedPendientesRevisar"
+            (click)="cambiarConmutador(ac.L_PENDIENTES_REVISAR)">
+            <mat-icon>{{ac.I_PENDIENTE_REVISAR}}</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+    </div>
+
+    <div id="listado-resultados">
+      <mat-table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+          <mat-cell *matCellDef="let element">{{element.id}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="caracterPrincipal.acronimo">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-chip-listbox>
+              <mat-chip [color]="element.caracterPrincipal != null ? (element.caracterPrincipal.acronimo | lowercase) : 'primary'">
+                {{element.tipoEntidad.acronimo}}
+              </mat-chip>
+            </mat-chip-listbox>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="nombreCorto">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <img class="avatar-1x" matTooltip="{{element.codigo}}" [src]="element | rutaAvatarEntidad">
+            <mat-label>{{element | nombreEntidadCompleto}}</mat-label>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="caracteres">
+          <mat-header-cell *matHeaderCellDef>{{ac.CARACTERES}}</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-chip-listbox>
+              <mat-chip *ngFor="let caracter of element.caracteres" [color]="caracter.acronimo | lowercase">
+                {{caracter.acronimo}}
+              </mat-chip>
+            </mat-chip-listbox>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="lugar.nombre">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>{{ac.LUGAR}}</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-label *ngIf="element.lugar != null">{{element.lugar.nombre}}</mat-label>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="visible">
+          <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-icon color="no-visible" matTooltip="{{ac.L_NO_VISIBLE}}" *ngIf="!element.visible">{{ac.I_NO_VISIBLE}}</mat-icon>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="pendienteRevisar">
+          <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-icon color="revisar" matTooltip="{{ac.L_PENDIENTE_REVISAR}}" *ngIf="element.pendienteRevisar">{{ac.I_PENDIENTE_REVISAR}}</mat-icon>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="ver">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_VER}}" (click)="irADetalle(modoVer, element)" >
+              <mat-icon color="ver">{{ac.I_VER}}</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="editar" *ngIf="esAdministrador">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_EDITAR}}" (click)="irADetalle(modoEditar, element)">
+              <mat-icon color="editar">{{ac.I_EDITAR}}</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="eliminar" *ngIf="esAdministrador">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button class="iconbutton" matTooltip="{{ac.L_ELIMINAR}}" (click)="eliminar(element)">
+              <mat-icon color="eliminar">{{ac.I_ELIMINAR}}</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell sin-resultados" colspan="4">{{ac.G_VAL_SIN_RESULTADOS_TABLA}}</td>
+        </tr>
+      </mat-table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 50, 100]" [pageSize]="5" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div>
