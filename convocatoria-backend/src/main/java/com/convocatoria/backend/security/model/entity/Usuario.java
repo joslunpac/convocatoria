@@ -16,6 +16,9 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.convocatoria.backend.model.entity.Auditoria;
+import com.convocatoria.backend.model.entity.Entidad;
+import com.convocatoria.backend.model.entity.TipoActoCulto;
+import com.convocatoria.backend.model.entity.Titular;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -56,5 +59,17 @@ public class Usuario extends Auditoria {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "usu_rol", joinColumns = @JoinColumn(name = "usu_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
 	private List<Rol> roles = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(name = "ent_usu", joinColumns = @JoinColumn(name = "usu_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ent_id", referencedColumnName = "id"))
+	private List<Entidad> entidades = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(name = "tit_usu", joinColumns = @JoinColumn(name = "usu_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "tit_id", referencedColumnName = "id"))
+	private List<Titular> titulares = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(name = "tac_usu", joinColumns = @JoinColumn(name = "usu_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "tac_id", referencedColumnName = "id"))
+	private List<TipoActoCulto> tiposActoCulto = new ArrayList<>();
 
 }

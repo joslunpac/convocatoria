@@ -67,7 +67,10 @@ public class precargarDatos implements CommandLineRunner {
                             "José María",
                             "Luna Pacheco",
                             passwordEncoder.encode("1234"),
-                            roles));
+                            roles,
+                            null,
+                            null,
+                            null));
         }
 
         // Tipos de entidad

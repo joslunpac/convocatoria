@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.convocatoria.backend.security.model.entity.Usuario;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,5 +60,8 @@ public class Titular {
 
 	@ManyToMany(mappedBy = "titulares")
 	private List<Evento> eventos = new ArrayList<>();
+
+	@ManyToMany(mappedBy = "titulares")
+	private List<Usuario> usuarios = new ArrayList<>();
 
 }

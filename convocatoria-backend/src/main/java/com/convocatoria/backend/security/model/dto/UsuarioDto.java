@@ -8,6 +8,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.convocatoria.backend.model.dto.AuditoriaDto;
+import com.convocatoria.backend.model.dto.EntidadDto;
+import com.convocatoria.backend.model.dto.TipoActoCultoDto;
+import com.convocatoria.backend.model.dto.TitularDto;
 import com.convocatoria.backend.model.dto.Views;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -49,5 +52,11 @@ public class UsuarioDto extends AuditoriaDto {
 
 	@NotNull(message = "Debe contener al menos un rol")
 	private List<RolDto> roles;
+
+	private List<EntidadDto> entidades;
+
+	private List<TitularDto> titulares;
+
+	private List<TipoActoCultoDto> tiposActoCulto;
 
 }
