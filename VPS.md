@@ -63,17 +63,17 @@ $ sudo mysql
 
 Creamos la base de datos
 ```bash
-mysql> create database convocatoria;
+mysql> create database databasename;
 ```
 
 Creamos un nuevo usuario que solamente pueda conectarse desde el propio servidor
 ```bash
-mysql> create user ‘convocatoriadb’@'localhost' identified by 'convocatoriadb';
+mysql> create user 'usernamedb'@'localhost' identified by 'usernamedb';
 ```
 
 Damos privilegios sobre la nueva tabla al nuevo usuario
 ```bash
-mysql> grant all privileges on convocatoria.* to 'convocatoriadb'@'localhost' with grant option;
+mysql> grant all privileges on databasename.* to 'usernamedb'@'localhost' with grant option;
 
 mysql> flush privileges;
 ```
@@ -85,7 +85,7 @@ mysql> exit
 
 Nos logamos con el nuevo usuario
 ```bash
-$ mysql -u convocatoriadb -p
+$ mysql -u usernamedb -p
 ```
 
 **3. Conexión remota a la base de datos**
@@ -97,12 +97,12 @@ $ sudo mysql
 
 Creamos un usuario que pueda conectarse remotamente (`%`)
 ```bash
-mysql> create user 'convocatoriadb'@'%' identified by 'convocatoriadb';
+mysql> create user 'usernamedb'@'%' identified by 'usernamedb';
 ```
 
 Damos privilegios sobre la tabla al nuevo usuario
 ```bash
-mysql> grant all privileges on convocatoria.* to 'convocatoriadb'@'%' with grant option;
+mysql> grant all privileges on databasename.* to 'usernamedb'@'%' with grant option;
 
 mysql> flush privileges;
 ```

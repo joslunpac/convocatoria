@@ -1,9 +1,8 @@
 export class ApiConstants {
   // General
   public static API_HOST: string = 'http://localhost:';
-  public static API_PORT: string = '8081';
-  public static API_ENDPOINT: string = '/api';
-  public static API_URL_ENDPOINT: string = this.API_HOST + this.API_PORT + this.API_ENDPOINT;
+  public static API_PORT: string = '8090';
+  public static API_URL_ENDPOINT: string = this.API_HOST + this.API_PORT;
 
   // Auth
   public static API_URI_AUTH: string = '/auth';

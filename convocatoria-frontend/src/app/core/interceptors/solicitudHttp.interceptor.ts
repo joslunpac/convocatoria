@@ -34,7 +34,7 @@ export class SolicitudHttpInterceptor implements HttpInterceptor {
     return next.handle(authReq).pipe(catchError((error: HttpErrorResponse) => {
       // Si se ha producido algún error en la solicitud HTTP
 
-      if (error.status === HttpStatusCode.Unauthorized && error.error.path !== APC.API_ENDPOINT + APC.API_URI_AUTH + APC.API_METHOD_SIGNIN) {
+      if (error.status === HttpStatusCode.Unauthorized && error.error.path !== APC.API_URI_AUTH + APC.API_METHOD_SIGNIN) {
         // 401. Si está relacionado con la autenticación o autorización
         console.log(APC.TOKEN_EXPIRADO);
 
