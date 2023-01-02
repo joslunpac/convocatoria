@@ -18,29 +18,17 @@ public class Constantes {
 
 	// Entidades
 	public static final String BANDA = "Banda";
-	public static final String BANDAS = "Bandas";
 	public static final String CARACTER = "Carácter";
-	public static final String CARACTERES = "Carácteres";
 	public static final String ENTIDAD = "Entidad";
-	public static final String ENTIDADES = "Entidades";
 	public static final String EVENTO = "Evento";
-	public static final String EVENTOS = "Eventos";
 	public static final String LUGAR = "Lugar";
-	public static final String LUGARES = "Lugares";
 	public static final String PERSONA = "Persona";
-	public static final String PERSONAS = "Personas";
 	public static final String ROL = "Rol";
-	public static final String ROLES = "Roles";
 	public static final String TIPO_ACTO_CULTO = "Tipo de acto o culto";
-	public static final String TIPOS_ACTO_CULTO = "Tipos de acto o culto";
 	public static final String TIPO_BANDA = "Tipo de banda";
-	public static final String TIPOS_BANDA = "Tipos de banda";
 	public static final String TIPO_ENTIDAD = "Tipo de entidad";
-	public static final String TIPOS_ENTIDAD = "Tipos de entidad";
 	public static final String TITULAR = "Titular";
-	public static final String TITULARES = "Titulares";
 	public static final String USUARIO = "Usuario";
-	public static final String USUARIOS = "Usuarios";
 
 	public static final String BY_CRITERIA = "ByCriteria";
 
