@@ -185,7 +185,7 @@ Para permitir la conexión desde cualquier ip, comentamos la línea `bind-addres
 
 Reiniciamos MySQL.
 ```bash
-$ service mysql restart
+$ systemctl restart mysql.service
 ```
 
 Por último, abrimos el puerto `3306` de MySql. Desde el panel de clouding.io, vamos a la opción `Mis Firewalls` y pulsamos el signo `+` para añadir una nueva regla al firewall. Seleccionamos la plantilla que queremos utilizar, en nuestro caso `Permitir MySql` y pulsamos el signo `+` para que nos muestre los datos de la plantilla. Lo dejamos todo por defecto y pulsamos enviar para crear la regla.
