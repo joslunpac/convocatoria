@@ -1,6 +1,5 @@
 export class ApiConstants {
   // General
-
   public static API_HOST: string = 'http://46.183.119.128:';
   public static API_PORT: string = '8090';
   public static API_URL_ENDPOINT: string = this.API_HOST + this.API_PORT;
