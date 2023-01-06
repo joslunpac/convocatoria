@@ -1,5 +1,17 @@
 ## Configuración paso a paso de un VPS Ubuntu 22.04
 # General
+
+Iniciamos sesión con sudo (`root`).
+```bash
+$ ssh root@ip_servidor
+```
+
+Actualizamos el índice de paquetes del servidor
+```bash
+$ sudo apt update
+$ sudo apt upgrade
+```
+
 **1. Creación de un nuevo usuario**
 
 Iniciamos sesión con sudo (`root`).
@@ -9,30 +21,30 @@ $ ssh root@ip_servidor
 
 Creamos el nuevo usuario.
 ```bash
-$ adduser userdev
+$ adduser dev
 ```
 
-Ahora podemos ver una nueva carpeta `/home/userdev` para el nuevo usuario.
+Ahora podemos ver una nueva carpeta `/home/dev` para el nuevo usuario.
 
 Otorgamos todos los privilegios del usuario sudo (`root`).
 ```bash
-$ usermod -aG sudo userdev
+$ usermod -aG sudo dev
 ```
 
-Nos desconectamos del servidor, e iniciamos sesión de nuevo, pero ahora con userdev.
+Nos desconectamos del servidor, e iniciamos sesión de nuevo, pero ahora con dev.
 Deberíamos ver éste nuevo usuario de color verde.
 ```bash
 $ exit
-$ ssh userdev@[ipservidor]
+$ ssh dev@[ipservidor]
 
-userdev@[nombreservidor]:~$
+dev@[nombreservidor]:~$
 ```
 
 **2. Directorio para los proyectos**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Comprobamos si nos encontramos el su directorio.
@@ -40,7 +52,7 @@ Comprobamos si nos encontramos el su directorio.
 $ pwd
 ```
 
-Debe salir lo siguiente `/home/userdev`.
+Debe salir lo siguiente `/home/dev`.
 
 Creamos el directorio donde alojaremos los distintos proyectos que deseemos.
 ```bash
@@ -52,9 +64,9 @@ $ mkdir projects
 
 Iniciamos sesión en nuestra cuenta de Github, y en `Settings > Developer settings > Personal access tokens (classic)` generamos un nuevo token de acceso.
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Establecemos el usuario e email de Github con los siguientes comandos:
@@ -69,12 +81,12 @@ Reemplazamos `nombre_de_usuario` y `tu_correo@ejemplo.com` con nuestro nombre y 
 
 **2. Clonar un repositorio**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
-Nos ubicamos sobre el directorio `/home/userdev/projects` y clonamos el repositorio.
+Nos ubicamos sobre el directorio `/home/dev/projects` y clonamos el repositorio.
 ```bash
 $ git clone https://github.com/nombre_de_usuario/nombre_repositorio.git
 ```
@@ -86,9 +98,9 @@ A continuación nos solicitará el usuario y contraseña. Recuerda que ahora la 
 # Nginx (Servidor Web)
 **1. Instalación de Nginx**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Actualizamos el índice de paquetes del servidor e instalamos Nginx.
@@ -107,29 +119,43 @@ $ sudo systemctl status nginx
 
 Verificamos la instalación accediendo a la dirección ip del servidor en el navegador, y debemos ver la pantalla de bienvenida de Nginx.
 
-**2. Configuración del Firewall del servidor web**
+**3. Configuración genérica del servidor web**
 
-Iniciamos sesión con `userdev`.
+Evitamos u posible problema de meoria del subi hash que puede surgir al agregar nombre de servidores adicionales.
 ```bash
-$ ssh userdev@ip_servidor
+$ sudo nano /etc/nginx/nginx.conf
 ```
 
-Abrimos el puerto 80 (tráfico web normal, no cifrado) y el puerto 443 (tráfico TLS/SSL cifrado)
+Dentro del archivo, buscamos la directiva `server_sanmes_hash_bucket_size 64;` y la descomentamos.
+
+Reiniciamos el servico de nginx.
+```bash
+$ sudo systemctl restart nginx
+```
+
+**4. Configuración del Firewall del servidor web**
+
+Iniciamos sesión con `dev`.
+```bash
+$ ssh dev@ip_servidor
+```
+
+Abrimos el puerto 80 (tráfico web normal, no cifrado) y el puerto 443 (tráfico TLS/SSL cifrado).
 ```bash
 $ sudo ufw allow 'Nginx Full'
 ```
 
-Abrimos el puerto 22 (conexión ssh)
+Abrimos el puerto 22 (conexión ssh).
 ```bash
-$ sudo ufw allow 'OpenSSH' comment 'Habilitamos el acceso ssh'
+$ sudo ufw allow 'OpenSSH' comment 'Habilitar el acceso ssh'
 ```
 
-Abrimos el puerto 8090 (Puerto en el que escucha el backend)
+Abrimos el puerto 8090 (Puerto en el que escucha el backend).
 ```bash
 $ sudo ufw allow 8090 comment 'Habilitar el acceso al backend desde el exterior'
 ```
 
-Abrimos el puerto 3306 (Conexión MySQL)
+Abrimos el puerto 3306 (Conexión MySQL).
 ```bash
 $ sudo ufw allow mysql comment 'Habilitar el acceso a MySQL desde el exterior'
 $ sudo ufw insert 1 allow from ip_servidor to any port 3306
@@ -154,18 +180,42 @@ $ sudo apt update
 $ sudo apt upgrade
 ```
 
-Reiniciamos el servico de nginx
+Reiniciamos el servico de nginx.
 ```bash
 $ sudo systemctl restart nginx
 ```
-**3. Configuración de bloques de servidor**
+
+**5. Configuración de bloques de servidor**
+
+Iniciamos sesión con `dev`.
+```bash
+$ ssh dev@ip_servidor
+```
+
+Para un servidor que aloja una sola página, basta con modificar el bloque de servidor por defecto de Nginx. Para ello vamos al directorio `/etc/nginx/sites-available` y ejecutamos el siguiente comando.
+```bash
+$ sudo nano default
+```
+
+Para que Ngnix no arroje un 404 al actualizar una pagina, hay que poner la 
+propiedad `try_files` a `$uri $uri/ /index.html;`.
+
+Comprobamos que no haya errores de sintaxis en los archivos de Nginx.
+```bach
+$ sudo nginx -t
+```
+
+Reiniciamos el servico de nginx.
+```bash
+$ sudo systemctl restart nginx
+```
 
 # Base de datos (MySQL)
 **1. Instalación de MySQL y configuración inicial**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Actualizamos el índice de paquetes del servidor e instalamos MySQL.
@@ -189,7 +239,7 @@ mysql> alter user 'root'@'localhost' identified with mysql_native_password by 'p
 
 Salimos de MySQL.
 ```bash
-misql> exit
+mysql> exit
 ```
 
 Ejecutamos el script de seguridad.
@@ -212,7 +262,7 @@ $ mysql -u root -p
 
 Volvemos a usar el método de autenticación predeterminado con este comando.
 ```bash
-mysql> alter user 'root'@'localhost' identified by auth_socket;
+mysql> alter user 'root'@'localhost' identified with auth_socket;
 ```
 
 Esto significará que podemos volver a conectarnos a MySQL como usuario `root` sin contraseña, usando el comando `sudo mysql`.
@@ -224,9 +274,9 @@ mysql> exit
 
 **2. Creación de la base de datos**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Entramos en MySQL.
@@ -263,9 +313,9 @@ $ mysql -u usernamedb -p
 
 **3. Conexión remota a la base de datos**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Entramos en MySQL.
@@ -287,7 +337,7 @@ mysql> flush privileges;
 
 Salimos de MySQL.
 ```bash
-mysql> exit
+mysql> exitmvn install
 ```
 
 Editamos el fichero `/etc/mysql/mysql.conf.d/mysqld.cnf`.
@@ -307,9 +357,9 @@ Abrimos el puerto `3306` de MySql. Desde el panel de clouding.io, vamos a la opc
 # Backend (Spring Boot Application)
 **1. Instalación de Maven**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Actualizamos el índice de paquetes del servidor e instalamos Maven.
@@ -328,9 +378,9 @@ $ mvn -version
 
 **2. Instalación de JDK**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Actualizamos el índice de paquetes del servidor e instalamos JDK.
@@ -349,18 +399,18 @@ $ java -version
 
 **3. Despliegue de la aplicación Spring Boot**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
-Nos dirijimos al directorio donde alojamos el backend `/home/userdev/projects/mi_proyecto` y ejecutamos los siguientes comandos.
+Nos dirijimos al directorio donde alojamos el backend `/home/dev/projects/mi_proyecto` y ejecutamos los siguientes comandos.
 ```bash
-$ mvn clen
+$ mvn clean
 $ mvn install
 ```
 
-Ejecutamos la aplicación y comprobamos que todo haya ido correctamente. Para ello, sobre el directorio del proyecto, que es `/home/userdev/projects/mi_proyecto`, ejecutamos el siguiente comando.
+Ejecutamos la aplicación y comprobamos que todo haya ido correctamente. Para ello, sobre el directorio del proyecto, que es `/home/dev/projects/mi_proyecto`, ejecutamos el siguiente comando.
 ```bash
 $ java -jar target/nombre_jar.jar
 ```
@@ -369,9 +419,9 @@ Reemplazamos `nombre_jar` por el nombre creado para nuestro fichero.jar.
 
 **4. Crear un servicio para arrancar y parar la aplicación**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Creamos el fichero `mi_proyecto.service` y lo alojamos en la ruta de servicios del sistema.
@@ -386,8 +436,8 @@ Description=Mi proyecto
 After=syslog.target
 
 [Service]
-User=userdev
-ExecStart=/usr/bin/java -jar /home/userdev/projects/mi_proyecto/target/nombre_jar.jar
+User=dev
+ExecStart=/usr/bin/java -jar /home/dev/projects/mi_proyecto/target/nombre_jar.jar
 SuccessExitStatus=143
 
 [Install]
@@ -406,9 +456,9 @@ Por último, abrimos el puerto `8090` que es donde se arranca el proyecto. Desde
 # Frontend (Angular Application)
 **1. Instalación de nvm**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Actualizamos el índice de paquetes del servidor e instalamos nvm.
@@ -432,9 +482,9 @@ $ nvm
 
 **2. Instalación de node**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Actualizamos el índice de paquetes del servidor e instalamos la última versión estable de node.
@@ -453,9 +503,9 @@ $ node --version
 
 **3. Instalación de Angular CLI**
 
-Iniciamos sesión con `userdev`.
+Iniciamos sesión con `dev`.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
 Actualizamos el índice de paquetes del servidor e instalamos Angular CLI.
@@ -467,14 +517,14 @@ $ sudo apt update
 $ sudo apt upgrade
 ```
 
-**5. Despliegue de la aplicación Angular**
+**5. Preparación de SPA de la aplicación Angular**
 
-Iniciamos sesión con userdev.
+Iniciamos sesión con dev.
 ```bash
-$ ssh userdev@ip_servidor
+$ ssh dev@ip_servidor
 ```
 
-Nos dirijimos al directorio donde alojamos el frontend `/home/userdev/projects/mi_proyecto`.
+Nos dirijimos al directorio donde alojamos el frontend `/home/dev/projects/mi_proyecto`.
 
 Generamos la carpeta `node_modules`.
 ```bash
@@ -486,9 +536,22 @@ Compilamos el proyecto para producción y generamos la carpeta `dist`.
 $ ng build --configuration production
 ```
 
-Copiamos el contenido de la carpeta `dist/mi_proyecto` 
+Comprobamos que ha generado el código del SPA en el directorio `/home/dev/projects/mi_proyecto/dist/mi_proyecto`.
 
+**5. Despliegue del frontend**
 
+Borramos el contenido del directorio `/var/www/html` y copiamos el SPA generado en `/home/dev/projects/mi_proyecto/dist/mi_proyecto`.
 
+Para verificar que todo ha ido correctamente, ponemos en el navegador la dirección ip de nuestro servidor, y deberíamos ver la aplicación angular.
+
+# Utiles
 
 cp -r # copia archivos y carpetas
+
+Ver el espacio usado en disco en el servidor
+sudo df -h
+
+Ver el espacio usado en disco en un directorio
+sudo du -hs * | sort -h
+
+sudo du -sh /
