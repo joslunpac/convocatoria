@@ -57,7 +57,7 @@ public class EventoService {
 
 	public Page<Evento> findAllByCriteria(RolEnum rol, TipoBusquedaEnum tipoBusqueda, LocalDate fechaInicial,
 			LocalDate fechaFinal, Long idTipoActoCulto, Long idEntidadOrganizadora, Long idTitular, Long idPersona,
-			Long idLugar, Long[] tiposEntidadId, Long[] caracteresId, boolean noVisibles,
+			Long idLugar, Long[] tiposEntidadId, Long[] caracteresId, boolean sinCaracter, boolean noVisibles,
 			boolean aplazados, boolean suspendidos, boolean extraordinarios, boolean pendienteRevisar,
 			boolean pendienteDuplicar, Pageable pageable) {
 		Specification<Evento> specification = (root, query, cb) -> {
@@ -166,6 +166,11 @@ public class EventoService {
 				for (Long caracterId : caracteresId) {
 					predicatesTipoEntidadCaracter.add(cb.equal(root.join("caracter", JoinType.LEFT).get("id"), caracterId));
 				}
+			}
+
+			if (sinCaracter) {
+				// Eventos de hermandades que no contengan ningún carácter
+				predicatesTipoEntidadCaracter.add(root.join("caracter", JoinType.LEFT).isNull());
 			}
 
 			if ((tiposEntidadId != null && tiposEntidadId.length > 0) || (caracteresId != null && caracteresId.length > 0)) {
@@ -367,26 +372,29 @@ public class EventoService {
 
 
 		// DEFINIMOS EL CARÁCTER DEL EVENTO
-		if (eventoAPersistir.tieneTitulares()) {
-			// Si contiene algún titular, le asignamos el carácter del primer titular
-
-			// Por seguridad, obtenemos el primer titular completo asociado al evento a persistir
-			Titular titular = titularService.findById(eventoAPersistir.getTitulares().get(0).getId()).get();
-			eventoAPersistir.setCaracter(titular.getCaracter());
-		} else {
-			// Si no contiene titulares, comprobamos si la entidad organizadora posee carácter
-
-			// Por seguridad, obtenemos la entidad organizadora completa asociada al evento a persistir
-			Entidad entidadOrganizadora = entidadService.findById(RolEnum.ROLE_ADMINISTRADOR, eventoAPersistir.getEntidadOrganizadora().getId()).get();
-
-			if (entidadOrganizadora.getCaracterPrincipal() != null) {
-				// Si la entidad organizadora posee carácter, le asignamos el mismo al evento
-				eventoAPersistir.setCaracter(entidadOrganizadora.getCaracterPrincipal());
+		if (!eventoAPersistir.tieneCaracter()) {
+			// Si no tiene caracter asignado a la fuerza
+			if (eventoAPersistir.tieneTitulares()) {
+				// Si contiene algún titular, le asignamos el carácter del primer titular
+	
+				// Por seguridad, obtenemos el primer titular completo asociado al evento a persistir
+				Titular titular = titularService.findById(eventoAPersistir.getTitulares().get(0).getId()).get();
+				eventoAPersistir.setCaracter(titular.getCaracter());
 			} else {
-				// Si la entidad organizadora no posee carácter, no le asignamos ninguno al evento
-				eventoAPersistir.setCaracter(null);
+				// Si no contiene titulares, comprobamos si la entidad organizadora posee carácter
+	
+				// Por seguridad, obtenemos la entidad organizadora completa asociada al evento a persistir
+				Entidad entidadOrganizadora = entidadService.findById(RolEnum.ROLE_ADMINISTRADOR, eventoAPersistir.getEntidadOrganizadora().getId()).get();
+	
+				if (entidadOrganizadora.getCaracterPrincipal() != null) {
+					// Si la entidad organizadora posee carácter, le asignamos el mismo al evento
+					eventoAPersistir.setCaracter(entidadOrganizadora.getCaracterPrincipal());
+				} else {
+					// Si la entidad organizadora no posee carácter, no le asignamos ninguno al evento
+					eventoAPersistir.setCaracter(null);
+				}
 			}
-		}
+		} 
 
 
 		// DEFINIMOS LA EXTRAORDINARIEDAD DEL EVENTO Y LOS ATRIBUTOS QUE DEPENDEN DE ELLA

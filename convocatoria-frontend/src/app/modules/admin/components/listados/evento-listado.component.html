@@ -144,6 +144,12 @@
             {{caracter.acronimo}}
           </mat-chip-option>
         </mat-chip-listbox>
+        <mat-chip-listbox>
+          <mat-chip-option color="primary" matTooltip="{{ac.SIN_CARACTER}}" [selected]="isCheckedSIN_CARACTER"
+            (click)="cambiarCaracter(null)">
+            {{ac.SIN_CARACTER_ACRONIMO}}
+          </mat-chip-option>
+        </mat-chip-listbox>
       </div>
       <div class="row">
         <mat-chip-listbox>
