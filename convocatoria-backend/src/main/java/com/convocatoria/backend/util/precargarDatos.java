@@ -84,9 +84,9 @@ public class precargarDatos implements CommandLineRunner {
 
         // Carácteres
         if (caracterService.count() == 0) {
-            caracterService.save(new Caracter(null, "SAC", "Hermandades Sacramentales", null));
-            caracterService.save(new Caracter(null, "GLO", "Hermandades de Gloria", null));
-            caracterService.save(new Caracter(null, "PEN", "Hermandades de Penitencia", null));
+            caracterService.save(new Caracter(null, "SAC", "Sacramental", null));
+            caracterService.save(new Caracter(null, "GLO", "Gloria", null));
+            caracterService.save(new Caracter(null, "PEN", "Penitencia", null));
         }
     }
 }

@@ -64,7 +64,6 @@ export class EventoListadoComponent implements OnInit {
   tiposEntidad: TipoEntidad[] = [];
   caracteresId: number[] = [];
   caracteres: Caracter[] = [];
-  isCheckedSIN_CARACTER: boolean = true;
   isCheckedNoVisibles: boolean = false;
   isCheckedAplazados: boolean = false;
   isCheckedSuspendidos: boolean = false;
@@ -216,8 +215,7 @@ export class EventoListadoComponent implements OnInit {
   obtenerListadoCompleto(desdePrincipio: boolean = true): void {
     if (
       this.tiposEntidadId.length > 0 || // AGR, SED, ORG, BAN
-      this.caracteresId.length > 0 || // HER
-      this.isCheckedSIN_CARACTER
+      this.caracteresId.length > 0 // HER
     ) {
       // Solo realizamos la búsqueda si se especifica como criterio de búsqueda al menos un tipo de entidad o un carácter
 
@@ -239,7 +237,6 @@ export class EventoListadoComponent implements OnInit {
           this.idLugar,
           this.tiposEntidadId,
           this.caracteresId,
-          this.isCheckedSIN_CARACTER,
           this.isCheckedNoVisibles,
           this.isCheckedAplazados,
           this.isCheckedSuspendidos,
@@ -351,7 +348,6 @@ export class EventoListadoComponent implements OnInit {
     if (this.idLugar != undefined) return true;
     if (this.tiposEntidadId.length != this.tiposEntidad.length) return true;
     if (this.caracteresId.length != this.caracteres.length) return true;
-    if (!this.isCheckedSIN_CARACTER) return true;
     if (this.isCheckedNoVisibles) return true;
     if (this.isCheckedAplazados) return true;
     if (this.isCheckedSuspendidos) return true;
@@ -385,7 +381,6 @@ export class EventoListadoComponent implements OnInit {
       this.caracteresId.push(caracter.id);
     }
 
-    this.isCheckedSIN_CARACTER = true;
     this.isCheckedNoVisibles = false;
     this.isCheckedAplazados = false;
     this.isCheckedSuspendidos = false;
@@ -442,19 +437,15 @@ export class EventoListadoComponent implements OnInit {
    * Método encargado de construir el array de ids de carácteres
    * @param idCaracter Identificador del carácter
    */
-  cambiarCaracter(idCaracter: number | null): void {
-    if (idCaracter != null) {
-      const indexCaracterId = this.caracteresId.findIndex((object) => {
-        return object === idCaracter;
-      });
+  cambiarCaracter(idCaracter: number): void {
+    const indexCaracterId = this.caracteresId.findIndex((object) => {
+      return object === idCaracter;
+    });
 
-      if (indexCaracterId !== -1) {
-        this.caracteresId.splice(indexCaracterId, 1);
-      } else {
-        this.caracteresId.push(idCaracter);
-      }
+    if (indexCaracterId !== -1) {
+      this.caracteresId.splice(indexCaracterId, 1);
     } else {
-      this.isCheckedSIN_CARACTER = !this.isCheckedSIN_CARACTER;
+      this.caracteresId.push(idCaracter);
     }
   }
 

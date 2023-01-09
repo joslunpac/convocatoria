@@ -57,7 +57,7 @@ public class EventoService {
 
 	public Page<Evento> findAllByCriteria(RolEnum rol, TipoBusquedaEnum tipoBusqueda, LocalDate fechaInicial,
 			LocalDate fechaFinal, Long idTipoActoCulto, Long idEntidadOrganizadora, Long idTitular, Long idPersona,
-			Long idLugar, Long[] tiposEntidadId, Long[] caracteresId, boolean sinCaracter, boolean noVisibles,
+			Long idLugar, Long[] tiposEntidadId, Long[] caracteresId, boolean noVisibles,
 			boolean aplazados, boolean suspendidos, boolean extraordinarios, boolean pendienteRevisar,
 			boolean pendienteDuplicar, Pageable pageable) {
 		Specification<Evento> specification = (root, query, cb) -> {
@@ -166,11 +166,6 @@ public class EventoService {
 				for (Long caracterId : caracteresId) {
 					predicatesTipoEntidadCaracter.add(cb.equal(root.join("caracter", JoinType.LEFT).get("id"), caracterId));
 				}
-			}
-
-			if (sinCaracter) {
-				// Eventos de hermandades que no contengan ningún carácter
-				predicatesTipoEntidadCaracter.add(root.join("caracter", JoinType.LEFT).isNull());
 			}
 
 			if ((tiposEntidadId != null && tiposEntidadId.length > 0) || (caracteresId != null && caracteresId.length > 0)) {

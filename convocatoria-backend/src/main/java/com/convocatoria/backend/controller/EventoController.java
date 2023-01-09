@@ -93,12 +93,11 @@ public class EventoController {
 			@RequestParam(required = false) Long idLugar,
 			@RequestParam(required = false) Long[] tiposEntidadId,
 			@RequestParam(required = false) Long[] caracteresId,
-			@RequestParam(defaultValue = "false") boolean sinCaracter,
 			@RequestParam(defaultValue = Constantes.DEFAULT_PAGE) int page,
 			@RequestParam(defaultValue = Constantes.DEFAULT_SIZE) int size,
 			@RequestParam(defaultValue = "fecha,asc") String[] sort) {
 		return this.findAllByCriteria(RolEnum.ROLE_USUARIO, tipoBusqueda, fechaInicial, fechaFinal, idTipoActoCulto,
-				idEntidadOrganizadora, idPersona, idTitular, idLugar, tiposEntidadId, caracteresId, sinCaracter, false, false, false,
+				idEntidadOrganizadora, idPersona, idTitular, idLugar, tiposEntidadId, caracteresId, false, false, false,
 				false, false, false, page, size, sort);
 	}
 
@@ -115,7 +114,6 @@ public class EventoController {
 			@RequestParam(required = false) Long idLugar,
 			@RequestParam(required = false) Long[] tiposEntidadId,
 			@RequestParam(required = false) Long[] caracteresId,
-			@RequestParam(defaultValue = "false") boolean sinCaracter,
 			@RequestParam(defaultValue = "false") boolean noVisibles,
 			@RequestParam(defaultValue = "false") boolean aplazados,
 			@RequestParam(defaultValue = "false") boolean suspendidos,
@@ -126,14 +124,14 @@ public class EventoController {
 			@RequestParam(defaultValue = Constantes.DEFAULT_SIZE) int size,
 			@RequestParam(defaultValue = "fecha,asc,horaIni1,asc") String[] sort) {
 		return this.findAllByCriteria(RolEnum.ROLE_ADMINISTRADOR, tipoBusqueda, fechaInicial, fechaFinal,
-				idTipoActoCulto, idEntidadOrganizadora, idTitular, idPersona, idLugar, tiposEntidadId, caracteresId, sinCaracter,
+				idTipoActoCulto, idEntidadOrganizadora, idTitular, idPersona, idLugar, tiposEntidadId, caracteresId,
 				noVisibles, aplazados, suspendidos, extraordinarios, pendienteRevisar, pendienteDuplicar, page, size,
 				sort);
 	}
 
 	private ResponseEntity<ResultadoDto> findAllByCriteria(RolEnum rol, TipoBusquedaEnum tipoBusqueda,
 			LocalDate fechaInicial, LocalDate fechaFinal, Long idTipoActoCulto, Long idEntidadOrganizadora,
-			Long idTitular, Long idPersona, Long idLugar, Long[] tiposEntidadId, Long[] caracteresId, boolean sinCaracter,
+			Long idTitular, Long idPersona, Long idLugar, Long[] tiposEntidadId, Long[] caracteresId,
 			boolean noVisibles, boolean aplazados, boolean suspendidos, boolean extraordinarios,
 			boolean pendienteRevisar, boolean pendienteDuplicar, int page, int size, String[] sort) {
 		if (idTipoActoCulto != null && !tipoActoCultoService.existsById(idTipoActoCulto))
@@ -153,8 +151,8 @@ public class EventoController {
 
 		Pageable pageable = utilidades.construirPageable(page, size, sort);
 		Page<Evento> pageEventos = eventoService.findAllByCriteria(rol, tipoBusqueda, fechaInicial, fechaFinal,
-				idTipoActoCulto, idEntidadOrganizadora, idTitular, idPersona, idLugar, tiposEntidadId, caracteresId, sinCaracter,
-				noVisibles, aplazados, suspendidos, extraordinarios, pendienteRevisar, pendienteDuplicar, pageable);
+				idTipoActoCulto, idEntidadOrganizadora, idTitular, idPersona, idLugar, tiposEntidadId, caracteresId, noVisibles,
+				aplazados, suspendidos, extraordinarios, pendienteRevisar, pendienteDuplicar, pageable);
 		List<Evento> eventos = pageEventos.getContent();
 
 		if (eventos.isEmpty())

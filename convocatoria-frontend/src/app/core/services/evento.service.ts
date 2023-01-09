@@ -34,7 +34,6 @@ export class EventoService {
    * @param idLugar Identificador del lugar dónde se celebra el evento
    * @param tiposEntidadId Ids de los tipos de entidad que puede poseer el evento
    * @param caracteresId Ids de los carácteres que puede poseer el evento
-   * @param sinCaracter Indica si el titular puede no poseer ningún carácter
    * @param noVisibles Indica si hay que mostrar únicamente los eventos no visibles
    * @param aplazados Indica si hay que mostrar únicamente los eventos aplazados
    * @param suspendidos Indica si hay que mostrar únicamente los eventos suspendidos
@@ -58,7 +57,6 @@ export class EventoService {
     idLugar: number | undefined,
     tiposEntidadId: number[],
     caracteresId: number[],
-    sinCaracter: boolean,
     noVisibles: boolean,
     aplazados: boolean,
     suspendidos: boolean,
@@ -81,7 +79,6 @@ export class EventoService {
     if (idLugar != null) params = params.append('idLugar', idLugar);
     if (tiposEntidadId != null && tiposEntidadId.length > 0) params = params.append('tiposEntidadId', tiposEntidadId.toString());
     if (caracteresId != null && caracteresId.length > 0) params = params.append('caracteresId', caracteresId.toString());
-    if (sinCaracter) params = params.append('sinCaracter', sinCaracter);
     if (noVisibles) params = params.append('noVisibles', noVisibles);
     if (aplazados) params = params.append('aplazados', aplazados);
     if (suspendidos) params = params.append('suspendidos', suspendidos);
@@ -124,7 +121,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -155,7 +151,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -186,7 +181,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -217,7 +211,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -248,7 +241,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -279,7 +271,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       true, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -310,7 +301,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -341,7 +331,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -372,7 +361,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       true, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -403,7 +391,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -434,7 +421,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -465,7 +451,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -496,7 +481,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -527,7 +511,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -558,7 +541,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -589,7 +571,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -620,7 +601,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -651,7 +631,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -682,7 +661,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
@@ -713,7 +691,6 @@ export class EventoService {
       undefined, // idLugar
       [], // tiposEntidadId
       [], // caracteresIds
-      false, // sinCaracter
       false, // isCheckedNoVisibles
       false, // isCheckedAplazados
       false, // isCheckedSuspendidos
