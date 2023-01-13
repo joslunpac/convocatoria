@@ -548,6 +548,12 @@ Para verificar que todo ha ido correctamente, ponemos en el navegador la direcci
 
 cp -r # copia archivos y carpetas
 
+sudo rm -R /var/www/html/*
+
+sudo cp -r /home/dev/projects/convocatoria/convocatoria-frontend/dist/convocatoria/* /var/www/html/
+
+sudo cp -r /var/www/index.nginx-debian_copia.html /var/www/html/index.nginx-debian.html
+
 Ver el espacio usado en disco en el servidor
 sudo df -h
 
